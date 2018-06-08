@@ -27,7 +27,7 @@ public class TweetListAdapter extends ArrayAdapter{
     @NonNull
   public View getView(int position , @Nullable View convertView , @NonNull ViewGroup parent){
         if(convertView == null){
-            convertView = minflater.inflate(R.layout.activity_main,parent,false);
+            convertView = minflater.inflate(R.layout.tweet,parent,false);
         }
         return convertView;
   }

@@ -6,4 +6,5 @@
     <string name="name">Name</string>
     <string name="username">UserName</string>
     <string name="tweet">Tweet</string>
+    <string name="logo_of_twitter">logo of Twitter</string>
 </resources>
