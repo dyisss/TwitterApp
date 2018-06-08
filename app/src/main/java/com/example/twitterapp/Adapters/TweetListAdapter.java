@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 
 import com.example.twitterapp.R;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -22,7 +23,6 @@ public class TweetListAdapter extends ArrayAdapter{
     public TweetListAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
         this.minflater = LayoutInflater.from(context);
-
     }
     @NonNull
   public View getView(int position , @Nullable View convertView , @NonNull ViewGroup parent){
