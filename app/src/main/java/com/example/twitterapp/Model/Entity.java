@@ -1,5 +1,7 @@
 package com.example.twitterapp.Model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -13,5 +15,8 @@ class Entity {
     private String symbols;
 
     public Entity(){
+    }
+
+    public Entity(JSONObject object){
     }
 }

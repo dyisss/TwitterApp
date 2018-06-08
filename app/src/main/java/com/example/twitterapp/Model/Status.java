@@ -1,13 +1,19 @@
 package com.example.twitterapp.Model;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Kyle on 08-Jun-18.
  */
 
 public class Status {
+    private final String TAG = "Status";
     private String created_at;
     private int id ;
-    private int id_str;
+    private String id_str;
     private String text;
     private Boolean trunacated;
     private Entity entity;
@@ -26,7 +32,7 @@ public class Status {
     private Boolean Retweeted;
     private String Lang;
 
-    public Status(String created_at , int id , int id_str , String text, Boolean trunacated ,Entity entity , Metadata metadata , String source , int in_reply_to_status_id ,String in_reply_to_status_id_str , String in_reply_to_screen_name ,User user,boolean is_quote_status,int Retweet_count , int Favorite_count,boolean Retweeted , String lang){
+    public Status(String created_at , int id , String id_str , String text, Boolean trunacated ,Entity entity , Metadata metadata , String source , int in_reply_to_status_id ,String in_reply_to_status_id_str , String in_reply_to_screen_name ,User user,boolean is_quote_status,int Retweet_count , int Favorite_count,boolean Retweeted , String lang){
         this.created_at = created_at;
         this.id = id;
         this.id_str = id_str;
@@ -46,6 +52,30 @@ public class Status {
         this.Lang = lang;
     }
 
+    public Status(JSONObject object){
+        try {
+            this.created_at = object.getString("created_at");
+            this.id = object.getInt("id");
+            this.id_str = object.getString("id_str");
+            this.text = object.getString("text");
+            this.trunacated = object.getBoolean("truncated");
+            this.entity = new Entity(object.getJSONObject("entity"));
+            this.metadata = new Metadata(object.getJSONObject("metadata"));
+            this.source = object.getString("source");
+            this.in_reply_to_status_id = object.getInt("in_reply_to_status_id");
+            this.in_reply_to_status_id_str = object.getString("in_reply_to_status_id_str");
+            this.in_reply_to_screen_name = object.getString("in_reply_to_screen_name");
+            this.user = new User(object.getJSONObject("user"));
+            this.is_quote_status = object.getBoolean("is_quote_status");
+            this.Retweet_count = object.getInt("retweet_count");
+            this.Favorite_count = object.getInt("favorite_count");
+            this.Retweeted = object.getBoolean("retweeted");
+            this.Lang = object.getString("lang");
+        }catch (JSONException e){
+            Log.d(TAG, e.toString());
+        }
+    }
+
     public String getCreated_at() {
         return created_at;
     }
@@ -54,7 +84,7 @@ public class Status {
         return id;
     }
 
-    public int getId_str() {
+    public String getId_str() {
         return id_str;
     }
 
