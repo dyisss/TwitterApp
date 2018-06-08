@@ -2,6 +2,7 @@ package com.example.twitterapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "mainactivity";
     private ListView tweetList;
     private TextView text;
     private String content;
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }catch(JSONException e){
-
+            Log.d(TAG, "onCreate: ");
         }
     }
 }
