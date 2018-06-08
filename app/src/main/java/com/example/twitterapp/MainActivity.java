@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView text;
     private String content;
     private TextView tvText;
+    private final String TAG = "mainactivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

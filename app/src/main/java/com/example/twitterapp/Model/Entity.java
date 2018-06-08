@@ -13,5 +13,6 @@ class Entity {
     private String symbols;
 
     public Entity(){
+
     }
 }
