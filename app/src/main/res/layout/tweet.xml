@@ -21,37 +21,79 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.02">
 
+        <ImageView
+            android:id="@+id/favoritebtn"
+            android:layout_width="53dp"
+            android:layout_height="33dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/favorite_android_string_videoview_error_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.047"
+            app:layout_constraintStart_toEndOf="@+id/retweetbtn"
+            app:layout_constraintTop_toBottomOf="@+id/tweetlayout"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_launcher_foreground" />
+
+        <ImageView
+            android:id="@+id/replybtn"
+            android:layout_width="50dp"
+            android:layout_height="33dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/reply_android_string_videoview_error_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tweetlayout"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_launcher_foreground" />
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tweetName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tweetUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="212dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/username"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toEndOf="@+id/tweetName"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tweet"
             android:layout_width="350dp"
             android:layout_height="66dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="@string/tweet"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/tweetUsername" />
+
+        <ImageView
+            android:id="@+id/retweetbtn"
+            android:layout_width="53dp"
+            android:layout_height="33dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/retweet_android_string_videoview_error_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/replybtn"
+            app:layout_constraintTop_toBottomOf="@+id/tweetlayout"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/retweet" />
 
     </android.support.constraint.ConstraintLayout>
 
