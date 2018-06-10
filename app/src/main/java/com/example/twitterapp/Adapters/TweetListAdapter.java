@@ -20,6 +20,7 @@ import java.util.List;
 public class TweetListAdapter extends ArrayAdapter{
     private LayoutInflater minflater;
 
+
     public TweetListAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
         this.minflater = LayoutInflater.from(context);
@@ -29,6 +30,7 @@ public class TweetListAdapter extends ArrayAdapter{
         if(convertView == null){
             convertView = minflater.inflate(R.layout.tweet,parent,false);
         }
+
         return convertView;
   }
 }

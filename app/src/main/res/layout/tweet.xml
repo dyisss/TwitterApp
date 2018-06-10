@@ -9,7 +9,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/tweetlayout"
         android:layout_width="0dp"
-        android:layout_height="174dp"
+        android:layout_height="125dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/favoritebtn"
             android:layout_width="53dp"
-            android:layout_height="33dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
@@ -39,7 +39,7 @@
         <ImageView
             android:id="@+id/replybtn"
             android:layout_width="50dp"
-            android:layout_height="33dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
@@ -52,7 +52,7 @@
         <TextView
             android:id="@+id/tweetName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/name"
@@ -62,7 +62,7 @@
         <TextView
             android:id="@+id/tweetUsername"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/username"
@@ -72,17 +72,19 @@
         <TextView
             android:id="@+id/tweet"
             android:layout_width="350dp"
-            android:layout_height="67dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/tweet"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/twitterlogo" />
 
         <ImageView
             android:id="@+id/retweetbtn"
             android:layout_width="53dp"
-            android:layout_height="33dp"
+            android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -95,7 +97,7 @@
         <ImageView
             android:id="@+id/twitterlogo"
             android:layout_width="37dp"
-            android:layout_height="32dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
