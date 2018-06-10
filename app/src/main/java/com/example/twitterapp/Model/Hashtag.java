@@ -25,7 +25,7 @@ class Hashtag extends Entity {
                 this.indices[i]=indicesArray.getInt(i);
             }
         }catch (JSONException e){
-
+            e.printStackTrace();
         }
     }
 

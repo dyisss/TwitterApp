@@ -1,5 +1,9 @@
 package com.example.twitterapp.Model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -7,9 +11,23 @@ import java.util.ArrayList;
  */
 
 public class Description {
-    private ArrayList<Url>urlList;
+    private ArrayList<Url>urlList = new ArrayList<>();
+
+
 
     public Description(){
-        urlList = new ArrayList<>();
+
+    }
+
+    public Description(JSONObject object) {
+        try{
+            JSONArray descriptionArray = object.getJSONArray("description");
+            for (int i = 0 ; i<descriptionArray.length();i++){
+                urlList.add((Url) descriptionArray.get(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }

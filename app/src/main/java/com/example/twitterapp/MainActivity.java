@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = "mainactivity";
     private ListView tweetList;
     private TextView text;
     private String content;
