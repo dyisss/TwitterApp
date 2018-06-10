@@ -58,16 +58,16 @@ public class Tweet extends ConstraintLayout {
         this.replybtn = replybtn;
     }
 
-    public void setTweetName(TextView tweetName) {
-        this.tweetName = tweetName;
+    public void setTweetName(String text) {
+        this.tweetName.setText(text);
     }
 
-    public void setTweetUsername(TextView tweetUsername) {
-        this.tweetUsername = tweetUsername;
+    public void setTweetUsername(String text) {
+        this.tweetUsername.setText(text);
     }
 
-    public void setTweet(TextView tweet) {
-        this.tweet = tweet;
+    public void setTweet(String text) {
+      this.tweet.setText(text);
     }
 
     public void setRetweetbtn(ImageView retweetbtn) {

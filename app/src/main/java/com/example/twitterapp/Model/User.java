@@ -143,6 +143,11 @@ public class User {
         this.translator_type = translator_type;
     }
 
+    public User(User user) {
+
+    }
+
+
     public int getId() {
         return id;
     }

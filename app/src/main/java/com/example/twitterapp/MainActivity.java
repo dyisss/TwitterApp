@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private String content;
     private TextView tvText;
     private final String TAG = "mainactivity";
-    private ArrayList<Status> statuses = new ArrayList<>();
+    public static ArrayList<Status> statuses = new ArrayList<>();
     private SearchMetaData searchMetaData;
 
     @Override
