@@ -6,10 +6,11 @@ import android.os.AsyncTask;
  * Created by yang- on 11/06/2018.
  */
 
-public class MyAsyncTask extends AsyncTask{
+public class MyAsyncTask extends AsyncTask<String, Double, Status> {
+
 
     @Override
-    protected Object doInBackground(Object[] objects) {
+    protected com.example.twitterapp.Model.Status doInBackground(String... strings) {
         return null;
     }
 
@@ -19,12 +20,12 @@ public class MyAsyncTask extends AsyncTask{
     }
 
     @Override
-    protected void onPostExecute(Object o) {
-        super.onPostExecute(o);
+    protected void onPostExecute(com.example.twitterapp.Model.Status status) {
+        super.onPostExecute(status);
     }
 
     @Override
-    protected void onProgressUpdate(Object[] values) {
+    protected void onProgressUpdate(Double... values) {
         super.onProgressUpdate(values);
     }
 }

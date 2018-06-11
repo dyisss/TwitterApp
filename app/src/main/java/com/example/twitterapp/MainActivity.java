@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
+import com.example.twitterapp.Model.MyAsyncTask;
 import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        MyAsyncTask asyncTask = new MyAsyncTask();
 
         loadJSON();
 
