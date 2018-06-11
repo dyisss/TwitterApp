@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         text = findViewById(R.id.text);
-        tweetListAdapter = new TweetListAdapter(this,R.layout.test,statuses);
+        tweetListAdapter = new TweetListAdapter(this,R.layout.tweet,statuses);
         tweetList = findViewById(R.id.tweetList);
         tweetList.setAdapter(tweetListAdapter);
         InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
