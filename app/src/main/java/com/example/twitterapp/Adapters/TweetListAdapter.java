@@ -32,39 +32,26 @@ import java.util.List;
 public class TweetListAdapter extends ArrayAdapter{
     private LayoutInflater minflater;
 
-    private String content;
 
 
     public TweetListAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
         this.minflater = LayoutInflater.from(context);
-        InputStream is = getContext().getResources().openRawResource(R.raw.tweets);
-        try{
-            byte [] b = new byte[is.available()];
-            is.read(b);
-            content = new String(b);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
     @NonNull
-  public View getView(int position , @Nullable View convertView , @NonNull ViewGroup parent){
-        if(convertView == null){
-            convertView = minflater.inflate(R.layout.tweet,parent,false);
-        }
-        try {
-            JSONObject tweets = new JSONObject(content);
+  public View getView(int position , @Nullable View convertView , @NonNull ViewGroup parent) {
+        if (convertView == null) {
+            convertView = minflater.inflate(R.layout.tweet, parent, false);
+        } else {
+            //Tweet tweetview = (Tweet) convertView.findViewById(R.id.tweetlayout);
             Status status = MainActivity.statuses.get(position);
-            Tweet tweetview = (Tweet) convertView.findViewById(R.id.tweetlayout);
-            tweetview.setTweet(status.getText());
-            tweetview.setTweetName(status.getUser().getName());
-            tweetview.setTweetUsername(status.getUser().getScreen_name());
-        } catch (JSONException e) {
-            e.printStackTrace();
+            TextView textView = convertView.findViewById(R.id.tweet);
+            textView.setText(status.getId_str());
+            //tweetview.setTweet(status.getText());
+            //tweetview.setTweetName(status.getUser().getName());
+            //tweetview.setTweetUsername(status.getUser().getScreen_name());
         }
-
-
         return convertView;
-  }
+    }
 }

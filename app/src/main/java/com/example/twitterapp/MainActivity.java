@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 
@@ -25,14 +26,16 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "mainactivity";
     public static ArrayList<Status> statuses = new ArrayList<>();
     private SearchMetaData searchMetaData;
+    private TweetListAdapter tweetListAdapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         text = findViewById(R.id.text);
-
+        tweetListAdapter = new TweetListAdapter(this,R.layout.test,statuses);
         tweetList = findViewById(R.id.tweetList);
+        tweetList.setAdapter(tweetListAdapter);
         InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
         try{
             byte [] b = new byte[is.available()];
@@ -42,11 +45,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        tvText = findViewById(R.id.tvText);
-
         loadJSON();
 
-        tvText.setText(statuses.toString());
     }
 
     public void loadJSON(){
