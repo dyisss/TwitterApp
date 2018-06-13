@@ -46,13 +46,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        MyAsyncTask asyncTask = new MyAsyncTask();
-
         loadJSON();
 
     }
 
     public void loadJSON(){
+
         InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
         try{
             byte [] b = new byte[is.available()];
