@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.MyAsyncTask;
+import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 
@@ -33,20 +34,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text = findViewById(R.id.text);
-        tweetListAdapter = new TweetListAdapter(this,R.layout.tweet,statuses);
-        tweetList = findViewById(R.id.tweetList);
-        tweetList.setAdapter(tweetListAdapter);
-        InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
-        try{
-            byte [] b = new byte[is.available()];
-            is.read(b);
-            content = new String(b);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        text = findViewById(R.id.tvText);
+        MyAsyncTask asyncTask = new MyAsyncTask();
+        asyncTask.execute();
 
-        loadJSON();
+
+//        text.setText(textOAuth);
+//        tweetListAdapter = new TweetListAdapter(this,R.layout.tweet,statuses);
+//        tweetList = findViewById(R.id.tweetList);
+//        tweetList.setAdapter(tweetListAdapter);
+//        InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
+//        try{
+//            byte [] b = new byte[is.available()];
+//            is.read(b);
+//            content = new String(b);
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//
+//        loadJSON();
 
     }
 
