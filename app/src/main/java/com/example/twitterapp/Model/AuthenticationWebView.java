@@ -56,6 +56,7 @@ public class AuthenticationWebView extends AppCompatActivity{
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class AccessTokenTask extends AsyncTask<String, Void, Void>{
         @Override
         protected void onPostExecute(Void aVoid) {

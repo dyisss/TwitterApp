@@ -27,12 +27,15 @@ public class OpenAuthentication {
     private OAuth10aService service;
     private OAuth1RequestToken requestToken;
     private OAuth1AccessToken accessToken;
+    private final static String API_KEY = "EnqIn4E2YDcSuONFOcrj1yNwL";
+    private final static String API_SECRET="23cwrKzOTNPCcumdaNQ9x7GZTqaWceaFqCrqrQoUbmY14dCpvR";
     private boolean authorized;
     private OAuthRequest request;
 
     private OpenAuthentication() {
-        service = new ServiceBuilder("EnqIn4E2YDcSuONFOcrj1yNwL")
-                .apiSecret("23cwrKzOTNPCcumdaNQ9x7GZTqaWceaFqCrqrQoUbmY14dCpvR")
+        service = new ServiceBuilder(API_KEY)
+                .apiSecret(API_SECRET)
+                .callback("https://www.google.com/")
                 .build(TwitterApi.instance());
 
     }
@@ -59,7 +62,6 @@ public class OpenAuthentication {
     public void setAccessToken(String verifier){
         try{
             accessToken = service.getAccessToken(requestToken, verifier);
-
         }catch (OAuthException e){
             setAuthorized(false);
         }catch (Exception e){
