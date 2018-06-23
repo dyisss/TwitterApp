@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -66,7 +67,11 @@ public class AuthenticationWebView extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(String... strings) {
-            openAuthentication.setAccessToken(strings[0]);
+            if(strings != null) {
+                openAuthentication.setAccessToken(strings[0]);
+            }else{
+                Log.d("Tag","strings is empty wtf");
+            }
             return null;
         }
     }
