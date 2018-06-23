@@ -1,5 +1,6 @@
 package com.example.twitterapp.Model;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -31,6 +32,7 @@ public class OpenAuthentication {
     private final static String API_SECRET="23cwrKzOTNPCcumdaNQ9x7GZTqaWceaFqCrqrQoUbmY14dCpvR";
     private boolean authorized;
     private OAuthRequest request;
+    SharedPreferences prefs;
 
     private OpenAuthentication() {
         service = new ServiceBuilder(API_KEY)
@@ -62,6 +64,7 @@ public class OpenAuthentication {
     public void setAccessToken(String verifier){
         try{
             accessToken = service.getAccessToken(requestToken, verifier);
+            saveToken(accessToken);
         }catch (OAuthException e){
             setAuthorized(false);
         }catch (Exception e){
@@ -102,5 +105,20 @@ public class OpenAuthentication {
             }
         return null;
         }
+    }
+    
+    public void saveToken(OAuth1AccessToken oAuth1AccessToken){
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("token",oAuth1AccessToken.getToken());
+        editor.putString("secret",oAuth1AccessToken.getTokenSecret());
+        editor.apply();
+    }
+
+    public OAuth1AccessToken getAccessToken(){
+        String token = prefs.getString("token","");
+        if(token.equals(""))return null;
+        String secret = prefs.getString("string","");
+        OAuth1AccessToken accessToken = new OAuth1AccessToken(token,secret);
+        return accessToken;
     }
 }

@@ -15,6 +15,7 @@ import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void update(Observable observable, Object o) {
         tweetListAdapter.notifyDataSetChanged();
         tweetList.invalidate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
 

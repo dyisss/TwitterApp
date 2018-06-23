@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.example.twitterapp.R;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 
 /**
  * Created by Kyle on 22-Jun-18.
@@ -21,11 +22,13 @@ public class AuthenticationWebView extends AppCompatActivity{
     private WebView wvAuth ;
     final OpenAuthentication openAuthentication = OpenAuthentication.getInstance();
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authroization);
         wvAuth = findViewById(R.id.tweetWeb);
+        wvAuth.getSettings().setJavaScriptEnabled(true);
         wvAuth.setWebViewClient(new WebViewClient(){
 
             public boolean shouldOverrideUrlLoading(WebView view, String url){
@@ -68,7 +71,9 @@ public class AuthenticationWebView extends AppCompatActivity{
         @Override
         protected Void doInBackground(String... strings) {
             if(strings != null) {
-                openAuthentication.setAccessToken(strings[0]);
+                String verifer = strings[0];
+                openAuthentication.setAccessToken(verifer);
+
             }else{
                 Log.d("Tag","strings is empty wtf");
             }
