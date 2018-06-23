@@ -1,28 +1,26 @@
 package com.example.twitterapp.Adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.twitterapp.MainActivity;
-import com.example.twitterapp.Model.Status;
-import com.example.twitterapp.Model.User;
+import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.R;
-import com.example.twitterapp.View.Tweet;
+import com.example.twitterapp.View.TweetView;
+import com.squareup.picasso.Picasso;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.w3c.dom.Text;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,26 +29,34 @@ import java.util.List;
 
 public class TweetListAdapter extends ArrayAdapter{
     private LayoutInflater minflater;
+    private List<Tweet> mTweets;
 
 
 
-    public TweetListAdapter(@NonNull Context context, int resource, @NonNull List objects) {
-        super(context, resource, objects);
-        this.minflater = LayoutInflater.from(context);
+    public TweetListAdapter(@NonNull Context context, int resource, @NonNull List<Tweet> objects) {
+        super(context, R.layout.tweet, objects);
+        minflater = LayoutInflater.from(context);
+        mTweets = objects;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
   public View getView(int position , @Nullable View convertView , @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = minflater.inflate(R.layout.tweet, parent, false);
         } else {
-            //Tweet tweetview = (Tweet) convertView.findViewById(R.id.tweetlayout);
-            Status status = MainActivity.statuses.get(position);
-            TextView textView = convertView.findViewById(R.id.tweet);
-            textView.setText(status.getId_str());
-            //tweetview.setTweet(status.getText());
-            //tweetview.setTweetName(status.getUser().getName());
-            //tweetview.setTweetUsername(status.getUser().getScreen_name());
+            Tweet tweet = mTweets.get(position);
+            TextView username = convertView.findViewById(R.id.tweetUsername);
+            TextView name = convertView.findViewById(R.id.tweetName);
+            TextView tweetText = convertView.findViewById(R.id.tweetText);
+            TextView date = convertView.findViewById(R.id.tweetDate);
+            ImageView profileImage = convertView.findViewById(R.id.tweetProfileImage);
+
+            Picasso.get().load(tweet.getUser().getProfile_image_url()).into(profileImage);
+            username.setText(tweet.getUser().getScreen_name());
+            name.setText(tweet.getUser().getName());
+            tweetText.setText(tweet.getText());
+            date.setText(tweet.getCreated_at());
         }
         return convertView;
     }

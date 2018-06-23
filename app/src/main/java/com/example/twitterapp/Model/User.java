@@ -80,7 +80,7 @@ public class User {
             this.profile_background_color = object.getString("profile_background_color");
             this.profile_background_image_url = object.getString("profile_background_image_url");
             this.profile_background_title = object.getBoolean("profile_background_title");
-            this.profile_image_url = object.getString("profile_image_url");
+            this.profile_image_url = object.getString("profile_image_url").replace("_normal","");
             this.profile_image_url_https = object.getString("profile_image_url_https");
             this.profile_banner_url = object.getString("profile_banner_url");
             this.profile_link_color = object.getString("profile_link_color");
@@ -99,54 +99,6 @@ public class User {
             Log.d(TAG, e.toString());
         }
     }
-
-    public User(int id, String id_str, String name, String screen_name, String location, String description, String url, Entity entity, int followers_count, int friends_count, int listed_count, String created_at, int favourites_count, int utc_offset, String time_zone, Boolean geo_enabled, Boolean verified, int statuses_count, String lang, Boolean contributors_enabled, Boolean is_translator, Boolean is_translation_enabled, String profile_background_color, String profile_background_image_url, Boolean profile_background_title, String profile_image_url, String profile_image_url_https, String profile_banner_url, String profile_link_color, String profile_sidebar_border_color, String profile_sidebar_fill_color, String profile_text_color, Boolean profile_use_background_image, Boolean has_extended_profile, Boolean default_profile, Boolean default_profile_image, Boolean following, Boolean follow_request_sent, Boolean notifications, String translator_type) {
-        this.id = id;
-        this.id_str = id_str;
-        this.name = name;
-        this.screen_name = screen_name;
-        this.location = location;
-        this.description = description;
-        this.url = url;
-        this.entity = entity;
-        this.followers_count = followers_count;
-        this.friends_count = friends_count;
-        this.listed_count = listed_count;
-        this.created_at = created_at;
-        this.favourites_count = favourites_count;
-        this.utc_offset = utc_offset;
-        this.time_zone = time_zone;
-        this.geo_enabled = geo_enabled;
-        this.verified = verified;
-        this.statuses_count = statuses_count;
-        this.lang = lang;
-        this.contributors_enabled = contributors_enabled;
-        this.is_translator = is_translator;
-        this.is_translation_enabled = is_translation_enabled;
-        this.profile_background_color = profile_background_color;
-        this.profile_background_image_url = profile_background_image_url;
-        this.profile_background_title = profile_background_title;
-        this.profile_image_url = profile_image_url;
-        this.profile_image_url_https = profile_image_url_https;
-        this.profile_banner_url = profile_banner_url;
-        this.profile_link_color = profile_link_color;
-        this.profile_sidebar_border_color = profile_sidebar_border_color;
-        this.profile_sidebar_fill_color = profile_sidebar_fill_color;
-        this.profile_text_color = profile_text_color;
-        this.profile_use_background_image = profile_use_background_image;
-        this.has_extended_profile = has_extended_profile;
-        this.default_profile = default_profile;
-        this.default_profile_image = default_profile_image;
-        this.following = following;
-        this.follow_request_sent = follow_request_sent;
-        this.notifications = notifications;
-        this.translator_type = translator_type;
-    }
-
-    public User(User user) {
-
-    }
-
 
     public int getId() {
         return id;
