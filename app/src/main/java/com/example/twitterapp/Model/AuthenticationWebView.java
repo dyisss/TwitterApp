@@ -1,6 +1,7 @@
 package com.example.twitterapp.Model;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.github.scribejava.core.model.OAuth1AccessToken;
 public class AuthenticationWebView extends AppCompatActivity{
     private WebView wvAuth ;
     final OpenAuthentication openAuthentication = OpenAuthentication.getInstance();
+    private String verifier;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -33,14 +35,15 @@ public class AuthenticationWebView extends AppCompatActivity{
 
             public boolean shouldOverrideUrlLoading(WebView view, String url){
                 if(url.startsWith("http://"));{
-                    wvAuth.destroy();
+                    Uri uri = Uri.parse(url);
+                    verifier = uri.getQueryParameter("oauth_verifer");
 
                     AlertDialog.Builder tBuildinger = new AlertDialog.Builder(AuthenticationWebView.this);
                     AccessTokenTask accessTokenTask = new AccessTokenTask();
                     accessTokenTask.execute();
                 }
 
-           return false;
+           return true;
             }
         });
         AuthorisationUrlTask authorisationUrlTask = new AuthorisationUrlTask();
@@ -71,9 +74,7 @@ public class AuthenticationWebView extends AppCompatActivity{
         @Override
         protected Void doInBackground(String... strings) {
             if(strings != null) {
-                String verifer = strings[0];
-                openAuthentication.setAccessToken(verifer);
-
+                openAuthentication.setAccessToken(verifier);
             }else{
                 Log.d("Tag","strings is empty wtf");
             }

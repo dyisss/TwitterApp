@@ -26,9 +26,10 @@ public class Tweet {
             this.id = jsonObject.getString("id_str");
             this.text = jsonObject.getString("text");
             this.user = new User(jsonObject.getJSONObject("user"));
-
             String date =  jsonObject.getString("created_at");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy");
+            this.created_at = LocalDateTime.parse(date);
+            this.created_at.format(formatter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

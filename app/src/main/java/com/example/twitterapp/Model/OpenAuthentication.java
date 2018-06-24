@@ -1,5 +1,6 @@
 package com.example.twitterapp.Model;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -33,6 +34,7 @@ public class OpenAuthentication {
     private boolean authorized;
     private OAuthRequest request;
     SharedPreferences prefs;
+    String res = null;
 
     private OpenAuthentication() {
         service = new ServiceBuilder(API_KEY)
@@ -57,7 +59,6 @@ public class OpenAuthentication {
             Log.d(TAG, e.toString());
         }
         String authUrl = service.getAuthorizationUrl(requestToken);
-
         return authUrl;
     }
 
@@ -65,6 +66,7 @@ public class OpenAuthentication {
         try{
             accessToken = service.getAccessToken(requestToken, verifier);
             saveToken(accessToken);
+            setAuthorized(true);
         }catch (OAuthException e){
             setAuthorized(false);
         }catch (Exception e){
@@ -76,6 +78,16 @@ public class OpenAuthentication {
         this.authorized = authorized;
     }
 
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void callTweetTask(){
+        getTweetsTask g = new getTweetsTask();
+        g.execute();
+    }
+
+    @SuppressLint("StaticFieldLeak")
     private  class getTweetsTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute() {
@@ -90,16 +102,15 @@ public class OpenAuthentication {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
-            Response response = null;
-            String res = null;
+            Response response ;
             request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
             service.signRequest(accessToken, request); // the access token from step 4
             try {
                 response = service.execute(request);
                 if (response.isSuccessful()){
                     res = response.getBody();
+                    TweetSampleDataProvider.parseJSONData("{'statues'"+res+"}",TweetSampleDataProvider.tweetsTimeline);
                 }
-                TweetSampleDataProvider.parseJSONData("{'statues'"+res+"}",TweetSampleDataProvider.tweetsTimeline);
             }catch (Exception e) {
                 Log.d(TAG, e.toString()) ;
             }

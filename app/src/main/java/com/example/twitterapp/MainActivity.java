@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private ListView tweetList;
     private final String TAG = "mainactivity";
     public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsTimeline;
-    private TweetListAdapter tweetListAdapter ;
+    private TweetListAdapter tweetListAdapter;
 
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         authorisationIntent();
-        tweetListAdapter = new TweetListAdapter(this,R.layout.tweet,tweetslist);
+        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList = findViewById(R.id.tweetList);
         tweetList.setAdapter(tweetListAdapter);
         tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         });
     }
 
-    public void authorisationIntent(){
+    public void authorisationIntent() {
         Intent authIntent = new Intent(MainActivity.this, AuthenticationWebView.class);
         startActivity(authIntent);
     }
@@ -64,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onResume() {
         super.onResume();
+        if (authentication.isAuthorized()) {
+            authentication.callTweetTask();
+        }
     }
 }
 
