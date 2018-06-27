@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
+import com.example.twitterapp.R;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.exceptions.OAuthException;
@@ -18,12 +19,13 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
+import java.util.Observable;
 
 /**
  * Created by yang- on 13/06/2018.
  */
 
-public class OpenAuthentication {
+public class OpenAuthentication extends Observable {
     final public static String TAG = "OpenAuthentication";
     private static OpenAuthentication oAuth;
     private OAuth10aService service;
@@ -32,9 +34,12 @@ public class OpenAuthentication {
     private final static String API_KEY = "EnqIn4E2YDcSuONFOcrj1yNwL";
     private final static String API_SECRET="23cwrKzOTNPCcumdaNQ9x7GZTqaWceaFqCrqrQoUbmY14dCpvR";
     private boolean authorized;
+    private String str_accesstoken;
+    private String str_access_token_secret;
     private OAuthRequest request;
-    SharedPreferences prefs;
-    String res = null;
+    private String res = null;
+    private String TwitterStreamUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
+    private String screenUserName = "BattousaiDyis";
 
     private OpenAuthentication() {
         service = new ServiceBuilder(API_KEY)
@@ -62,11 +67,22 @@ public class OpenAuthentication {
         return authUrl;
     }
 
+    public void loggedIn_AccessToken(String str_accesstoken,String str_access_token_secret){
+
+        this.str_accesstoken = str_accesstoken;
+        this.str_access_token_secret = str_access_token_secret;
+
+        accessToken = new OAuth1AccessToken(str_accesstoken ,str_access_token_secret);
+        authorized=true;
+    }
+
     public void setAccessToken(String verifier){
         try{
             accessToken = service.getAccessToken(requestToken, verifier);
-            saveToken(accessToken);
-            setAuthorized(true);
+
+            this.str_accesstoken = accessToken.getToken();
+            this.str_access_token_secret =accessToken.getTokenSecret();
+
         }catch (OAuthException e){
             setAuthorized(false);
         }catch (Exception e){
@@ -87,49 +103,72 @@ public class OpenAuthentication {
         g.execute();
     }
 
+    public String getStr_accesstoken() {
+        return str_accesstoken;
+    }
+
+    public String getStr_access_token_secret() {
+        return str_access_token_secret;
+    }
+
+    private class DownloadTwitterTask extends AsyncTask<String, Void, String> {
+        final static String CONSUMER_KEY = "MY CONSUMER KEY";
+        final static String CONSUMER_SECRET = "MY CONSUMER SECRET";
+        final static String TwitterTokenURL = "https://api.twitter.com/oauth2/token";
+        final static String TwitterStreamURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
+
+        @Override
+        protected String doInBackground(String... screenNames) {
+            String result = null;
+
+            if (screenNames.length > 0) {
+                result = getTwitterStream(screenNames[0]);
+                screenUserName = result;
+            }
+            return result;
+        }
+
+        private String getTwitterStream(String screenName) {
+            return screenName;
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private  class getTweetsTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            DownloadTwitterTask dt = new DownloadTwitterTask();
+            dt.execute();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            notifyObservers();
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
-            Response response ;
             request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
             service.signRequest(accessToken, request); // the access token from step 4
+
+            Response response ;
+
             try {
                 response = service.execute(request);
                 if (response.isSuccessful()){
+                    //request = new OAuthRequest(Verb.GET,TwitterStreamUrl + screenUserName);
+                    //service.signRequest(accessToken,request);
                     res = response.getBody();
-                    TweetSampleDataProvider.parseJSONData("{'statues'"+res+"}",TweetSampleDataProvider.tweetsTimeline);
                 }
+                TweetSampleDataProvider.tweetsTimeline.clear();
+                TweetSampleDataProvider.parseJSONData("{\"statuses\":"+res+"}",TweetSampleDataProvider.tweetsTimeline);
             }catch (Exception e) {
                 Log.d(TAG, e.toString()) ;
             }
         return null;
         }
-    }
-    
-    public void saveToken(OAuth1AccessToken oAuth1AccessToken){
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("token",oAuth1AccessToken.getToken());
-        editor.putString("secret",oAuth1AccessToken.getTokenSecret());
-        editor.apply();
-    }
-
-    public OAuth1AccessToken getAccessToken(){
-        String token = prefs.getString("token","");
-        if(token.equals(""))return null;
-        String secret = prefs.getString("string","");
-        OAuth1AccessToken accessToken = new OAuth1AccessToken(token,secret);
-        return accessToken;
     }
 }

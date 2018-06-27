@@ -56,7 +56,7 @@ public class TweetListAdapter extends ArrayAdapter{
             username.setText(tweet.getUser().getScreen_name());
             name.setText(tweet.getUser().getName());
             tweetText.setText(tweet.getText());
-            date.setText(tweet.getCreated_at());
+//            date.setText(String.valueOf(tweet.getCreated_at()));
         }
         return convertView;
     }

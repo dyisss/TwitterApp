@@ -1,6 +1,8 @@
 package com.example.twitterapp;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +19,10 @@ import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,29 +32,60 @@ import java.util.Observer;
 public class MainActivity extends AppCompatActivity implements Observer {
     private ListView tweetList;
     private final String TAG = "mainactivity";
-    public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsTimeline;
+    public static ArrayList<Tweet> tweetslist =TweetSampleDataProvider.tweetsTimeline ;
     private TweetListAdapter tweetListAdapter;
+    private String content;
 
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        authentication.addObserver(this);
+        tweetList = findViewById(R.id.tweetsList);
         authorisationIntent();
+//        InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
+//        try {
+//            byte[] b = new byte[is.available()];
+//            is.read(b);
+//            content = new String(b);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            JSONObject tweets = new JSONObject(content);
+//
+//            JSONArray statuses = tweets.getJSONArray("statuses");
+//
+//            for (int i = 0; i < statuses.length(); i++) {
+//                JSONObject status = statuses.getJSONObject(i);
+//                Tweet tweet = new Tweet(status);
+//                TweetSampleDataProvider.tweetsTimeline.add(tweet);
+//                tweetslist = TweetSampleDataProvider.tweetsTimeline;
+//            }
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
+//        tweetList.setAdapter(tweetListAdapter);
+//    }
+//}
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
-        tweetList = findViewById(R.id.tweetList);
         tweetList.setAdapter(tweetListAdapter);
-        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Intent detailedTweet = new Intent(MainActivity.this,DetailedTweet.class);
 //                detailedTweet.putExtra(INDEX,i);
 //                detailedTweet.putExtra(TAG,"MainActivity");
 //                startActivity(detailedTweet);
-            }
-        });
+//            }
+//        });
     }
+
 
     public void authorisationIntent() {
         Intent authIntent = new Intent(MainActivity.this, AuthenticationWebView.class);
@@ -65,8 +102,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         if (authentication.isAuthorized()) {
+            authentication.addObserver(this);
+            tweetListAdapter.notifyDataSetChanged();
+            tweetList.invalidate();
             authentication.callTweetTask();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        authentication.deleteObserver(this);
     }
 }
 

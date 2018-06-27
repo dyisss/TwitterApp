@@ -34,13 +34,11 @@ public class AuthenticationWebView extends AppCompatActivity{
         wvAuth.setWebViewClient(new WebViewClient(){
 
             public boolean shouldOverrideUrlLoading(WebView view, String url){
-                if(url.startsWith("http://"));{
+                if(url.startsWith("https://www.google.com/"));{
                     Uri uri = Uri.parse(url);
-                    verifier = uri.getQueryParameter("oauth_verifer");
-
-                    AlertDialog.Builder tBuildinger = new AlertDialog.Builder(AuthenticationWebView.this);
+                    verifier = uri.getQueryParameter("oauth_verifier");
                     AccessTokenTask accessTokenTask = new AccessTokenTask();
-                    accessTokenTask.execute();
+                    accessTokenTask.execute(verifier);
                 }
 
            return true;
@@ -74,7 +72,8 @@ public class AuthenticationWebView extends AppCompatActivity{
         @Override
         protected Void doInBackground(String... strings) {
             if(strings != null) {
-                openAuthentication.setAccessToken(verifier);
+                openAuthentication.setAuthorized(true);
+                openAuthentication.setAccessToken(strings[0]);
             }else{
                 Log.d("Tag","strings is empty wtf");
             }

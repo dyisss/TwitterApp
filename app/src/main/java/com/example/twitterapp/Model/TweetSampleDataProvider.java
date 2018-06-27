@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Kyle on 22-Jun-18.
@@ -31,10 +33,10 @@ public class TweetSampleDataProvider {
     public static void parseJSONData(String jsonString, List<Tweet> tweetList){
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray("statuses");
-            if(tweetList.size() != jsonArray.length()){
-                for(int i = 0 ; i <jsonArray.length() ; i++){
-                    JSONObject tweetObject = jsonArray.getJSONObject(i);
+            JSONArray statusesArray = jsonObject.getJSONArray("statuses");
+           if(tweetList.size()<statusesArray.length()){
+                for(int i = 0 ; i <statusesArray.length() ; i++){
+                    JSONObject tweetObject = statusesArray.getJSONObject(i);
                     Tweet tweet = new Tweet(tweetObject);
                     tweetList.add(tweet);
                 }
@@ -43,4 +45,5 @@ public class TweetSampleDataProvider {
             e.printStackTrace();
         }
     }
+
 }
