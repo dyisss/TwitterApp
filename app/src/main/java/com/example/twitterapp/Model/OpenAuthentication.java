@@ -159,8 +159,7 @@ public class OpenAuthentication extends Observable {
             try {
                 response = service.execute(request);
                 if (response.isSuccessful()){
-                    //request = new OAuthRequest(Verb.GET,TwitterStreamUrl + screenUserName);
-                    //service.signRequest(accessToken,request);
+
                     res = response.getBody();
                 }
                 TweetSampleDataProvider.tweetsTimeline.clear();

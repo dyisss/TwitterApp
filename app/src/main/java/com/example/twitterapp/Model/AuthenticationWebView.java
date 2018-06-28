@@ -72,7 +72,7 @@ public class AuthenticationWebView extends AppCompatActivity{
         @Override
         protected Void doInBackground(String... strings) {
             if(strings != null) {
-                openAuthentication.setAuthorized(true);
+
                 openAuthentication.setAccessToken(strings[0]);
             }else{
                 Log.d("Tag","strings is empty wtf");
