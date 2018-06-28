@@ -33,7 +33,7 @@ public class OpenAuthentication extends Observable {
     private OAuth1AccessToken accessToken;
     private final static String API_KEY = "EnqIn4E2YDcSuONFOcrj1yNwL";
     private final static String API_SECRET="23cwrKzOTNPCcumdaNQ9x7GZTqaWceaFqCrqrQoUbmY14dCpvR";
-    private boolean authorized;
+    private boolean authorized = false;
     private String str_accesstoken;
     private String str_access_token_secret;
     private OAuthRequest request;
@@ -78,11 +78,10 @@ public class OpenAuthentication extends Observable {
 
     public void setAccessToken(String verifier){
         try{
-            accessToken = service.getAccessToken(requestToken, verifier);
-
+            this.accessToken = service.getAccessToken(requestToken, verifier);
+            setAuthorized(true);
             this.str_accesstoken = accessToken.getToken();
             this.str_access_token_secret =accessToken.getTokenSecret();
-
         }catch (OAuthException e){
             setAuthorized(false);
         }catch (Exception e){
@@ -138,8 +137,8 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            DownloadTwitterTask dt = new DownloadTwitterTask();
-            dt.execute();
+          //  DownloadTwitterTask dt = new DownloadTwitterTask();
+            // dt.execute();
         }
 
         @Override
@@ -151,16 +150,14 @@ public class OpenAuthentication extends Observable {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
-            service.signRequest(accessToken, request); // the access token from step 4
-
-            Response response ;
-
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/home_timeline.json");
+            service.signRequest(accessToken , request); // the access token from step 4
+            Response response = null;
             try {
                 response = service.execute(request);
                 if (response.isSuccessful()){
-
                     res = response.getBody();
+                    Log.d("response",res);
                 }
                 TweetSampleDataProvider.tweetsTimeline.clear();
                 TweetSampleDataProvider.parseJSONData("{\"statuses\":"+res+"}",TweetSampleDataProvider.tweetsTimeline);

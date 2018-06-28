@@ -46,33 +46,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
         authorisationIntent();
-//        InputStream is = getBaseContext().getResources().openRawResource(R.raw.tweets);
-//        try {
-//            byte[] b = new byte[is.available()];
-//            is.read(b);
-//            content = new String(b);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            JSONObject tweets = new JSONObject(content);
-//
-//            JSONArray statuses = tweets.getJSONArray("statuses");
-//
-//            for (int i = 0; i < statuses.length(); i++) {
-//                JSONObject status = statuses.getJSONObject(i);
-//                Tweet tweet = new Tweet(status);
-//                TweetSampleDataProvider.tweetsTimeline.add(tweet);
-//                tweetslist = TweetSampleDataProvider.tweetsTimeline;
-//            }
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
-//        tweetList.setAdapter(tweetListAdapter);
-//    }
-//}
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
 //        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,16 +76,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
         super.onResume();
         if (authentication.isAuthorized()) {
             authentication.addObserver(this);
+            authentication.callTweetTask();
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
-            authentication.callTweetTask();
+        }else{
+            authorisationIntent();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        authentication.deleteObserver(this);
     }
 }
 

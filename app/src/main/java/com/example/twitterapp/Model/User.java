@@ -36,7 +36,7 @@ public class User {
     private Boolean is_translation_enabled;
     private String profile_background_color;
     private String profile_background_image_url;
-    private Boolean profile_background_title;
+    private Boolean profile_background_tile;
     private String profile_image_url;
     private String profile_image_url_https;
     private String profile_banner_url;
@@ -62,13 +62,13 @@ public class User {
             this.location = object.getString("location");
             this.description = object.getString("description");
             this.url = object.getString("url");
-            this.entity = new Entity(object.getJSONObject("entity"));
+           // this.entity = new Entity(object.getJSONObject("entity"));
             this.followers_count = object.getInt("followers_count");
             this.friends_count = object.getInt("friends_count");
             this.listed_count = object.getInt("listed_count");
             this.created_at = object.getString("created_at");
             this.favourites_count = object.getInt("favourites_count");
-            this.utc_offset = object.getInt("utc_offset");
+  //          this.utc_offset = object.getInt("utc_offset");
             this.time_zone = object.getString("time_zone");
             this.geo_enabled = object.getBoolean("geo_enabled");
             this.verified = object.getBoolean("verified");
@@ -79,7 +79,7 @@ public class User {
             this.is_translation_enabled = object.getBoolean("is_translation_enabled");
             this.profile_background_color = object.getString("profile_background_color");
             this.profile_background_image_url = object.getString("profile_background_image_url");
-            this.profile_background_title = object.getBoolean("profile_background_title");
+            this.profile_background_tile = object.getBoolean("profile_background_tile");
             this.profile_image_url = object.getString("profile_image_url").replace("_normal","");
             this.profile_image_url_https = object.getString("profile_image_url_https");
             this.profile_banner_url = object.getString("profile_banner_url");
@@ -284,12 +284,12 @@ public class User {
         this.profile_background_image_url = profile_background_image_url;
     }
 
-    public Boolean getProfile_background_title() {
-        return profile_background_title;
+    public Boolean getProfile_background_tile() {
+        return profile_background_tile;
     }
 
-    public void setProfile_background_title(Boolean profile_background_title) {
-        this.profile_background_title = profile_background_title;
+    public void setProfile_background_tile(Boolean profile_background_tile) {
+        this.profile_background_tile = profile_background_tile;
     }
 
     public String getProfile_image_url() {
