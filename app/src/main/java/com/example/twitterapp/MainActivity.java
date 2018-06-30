@@ -18,9 +18,7 @@ import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
-import com.example.twitterapp.View.TwitterButtons;
 import com.github.scribejava.core.model.OAuth1AccessToken;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,10 +55,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
         userImage = findViewById(R.id.acUserimage);
+        searchBtn = findViewById(R.id.searchBtn);
         authorisationIntent();
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
-
 //        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -93,6 +91,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,Alerts.class);
                 startActivity(intent);
+            }
+        });
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                authentication.searchTweets("rachel");
             }
         });
     }

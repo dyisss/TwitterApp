@@ -167,4 +167,43 @@ public class OpenAuthentication extends Observable {
         return null;
         }
     }
+
+    private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
+
+        @SuppressLint("NewApi")
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            String url = "https://api.twitter.com/1.1/search/tweets.json?q=";
+            for (int i = 0; i < strings.length; i++) {
+                url += strings[i];
+
+                if (i != strings.length - 1){
+                    url += "&";
+                }
+            }
+
+            request = new OAuthRequest(Verb.GET, url);
+            service.signRequest(accessToken , request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()){
+                    res = response.getBody();
+                    Log.d("response",res);
+                }
+                TweetSampleDataProvider.tweetsSearched.clear();
+                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
+    public void searchTweets(String query){
+        getSearchedTweetsTask get = new getSearchedTweetsTask();
+        get.execute(query);
+    }
 }
