@@ -18,49 +18,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/homeBtn"
-        android:layout_width="92dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tweetWeb"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/home" />
-
-    <ImageView
-        android:id="@+id/searchBtn"
-        android:layout_width="90dp"
-        android:layout_height="39dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/homeBtn"
-        app:layout_constraintTop_toBottomOf="@+id/tweetWeb"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/search" />
-
-    <ImageView
-        android:id="@+id/messageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/searchBtn"
-        app:layout_constraintTop_toBottomOf="@+id/tweetWeb"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/messages" />
-
-    <ImageView
-        android:id="@+id/alertBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/messageBtn"
-        app:layout_constraintTop_toBottomOf="@+id/tweetWeb"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/alert" />
-
 </android.support.constraint.ConstraintLayout>

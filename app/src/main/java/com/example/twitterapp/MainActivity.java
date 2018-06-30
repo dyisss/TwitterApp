@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public static ArrayList<Tweet> tweetslist =TweetSampleDataProvider.tweetsTimeline ;
     private TweetListAdapter tweetListAdapter;
     private String content;
+
+    //ImageViews
+    private ImageView homeBtn;
+    private ImageView searcBtn;
+    private ImageView messageBtn;
+    private ImageView alertBtn;
 
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
