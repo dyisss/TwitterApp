@@ -18,7 +18,9 @@ import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
+import com.example.twitterapp.View.TwitterButtons;
 import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,13 +37,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private final String TAG = "mainactivity";
     public static ArrayList<Tweet> tweetslist =TweetSampleDataProvider.tweetsTimeline ;
     private TweetListAdapter tweetListAdapter;
-    private String content;
 
-    //ImageViews
-    private ImageView homeBtn;
-    private ImageView searcBtn;
-    private ImageView messageBtn;
-    private ImageView alertBtn;
+    //imageView
+    public ImageView mHomeBtn = TwitterButtons.homeBtn;
+    public ImageView mSearcBtn = TwitterButtons.searchBtn;
+    public ImageView mMessageBtn = TwitterButtons.messageBtn;
+    public ImageView mAlertBtn = TwitterButtons.alertBtn;
+    private ImageView userImage;
+
 
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
@@ -50,11 +53,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setting up Timeline
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
+        userImage = findViewById(R.id.acUserimage);
         authorisationIntent();
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
+
 //        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -64,6 +70,31 @@ public class MainActivity extends AppCompatActivity implements Observer {
 //                startActivity(detailedTweet);
 //            }
 //        });
+        mHomeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        mMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //add intent to access user profile
+            }
+        });
+        mAlertBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,Alerts.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -85,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             authentication.addObserver(this);
             authentication.callTweetTask();
             tweetListAdapter.notifyDataSetChanged();
+         //   Picasso.get().load();
             tweetList.invalidate();
         }else{
             authorisationIntent();
