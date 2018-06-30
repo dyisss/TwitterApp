@@ -18,12 +18,14 @@ import java.util.Observer;
 
 public class TweetSampleDataProvider {
 
+    public static ArrayList<Tweet>tweetsSearched;
     public static ArrayList<Tweet>tweetsTimeline;
     public static  ArrayList<Tweet> detailedTweets;
     public static User currentUser;
     public static ArrayList<User> usersSearched;
 
     static{
+        tweetsSearched = new ArrayList<>();
         tweetsTimeline = new ArrayList<>();
         detailedTweets = new ArrayList<>();
         usersSearched = new ArrayList<>();

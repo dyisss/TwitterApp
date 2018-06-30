@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     //ImageViews
     private ImageView homeBtn;
-    private ImageView searcBtn;
+    private ImageView searchBtn;
     private ImageView messageBtn;
     private ImageView alertBtn;
 
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.activity_main);
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
+        searchBtn = findViewById(R.id.searchBtn);
         authorisationIntent();
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
@@ -64,6 +65,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
 //                startActivity(detailedTweet);
 //            }
 //        });
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                authentication.searchTweets("rachel");
+            }
+        });
     }
 
 
