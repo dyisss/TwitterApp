@@ -1,19 +1,23 @@
 package com.example.twitterapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
@@ -85,6 +89,14 @@ public class MainActivity extends Activity implements Observer {
 //            }
 //        });
 
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(MainActivity.this,SearchActivity.class);
+                startActivity(searchIntent);
+            }
+        });
+
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,6 +133,8 @@ public class MainActivity extends Activity implements Observer {
                     }
                 })
                         .show();
+                Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(searchIntent);
             }
         });
     }
