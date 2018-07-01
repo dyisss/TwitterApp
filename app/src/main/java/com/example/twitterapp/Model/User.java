@@ -52,6 +52,7 @@ public class User {
     private Boolean follow_request_sent;
     private Boolean notifications;
     private String translator_type;
+    private int friendsCount;
 
     public User(JSONObject object){
         try{
@@ -62,6 +63,7 @@ public class User {
             this.location = object.getString("location");
             this.description = object.getString("description");
             this.url = object.getString("url");
+            this.friendsCount = object.getInt("friends_count");
            // this.entity = new Entity(object.getJSONObject("entity"));
             this.followers_count = object.getInt("followers_count");
             this.friends_count = object.getInt("friends_count");
@@ -410,5 +412,13 @@ public class User {
 
     public void setTranslator_type(String translator_type) {
         this.translator_type = translator_type;
+    }
+
+    public int getFriendsCount() {
+        return friendsCount;
+    }
+
+    public void setFriendsCount(int friendsCount) {
+        this.friendsCount = friendsCount;
     }
 }

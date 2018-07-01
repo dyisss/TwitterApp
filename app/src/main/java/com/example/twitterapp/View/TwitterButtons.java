@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.twitterapp.Alerts;
 import com.example.twitterapp.MainActivity;
 import com.example.twitterapp.R;
 
@@ -44,9 +45,22 @@ public class TwitterButtons extends LinearLayout {
         if (inflater != null) {
             inflater.inflate(R.layout.twitterbuttons,this);
         }
-        homeBtn = findViewById(R.id.homeBtn);
-        searchBtn = findViewById(R.id.searchBtn);
-        messageBtn = findViewById(R.id.messageBtn);
-        alertBtn = findViewById(R.id.alertBtn);
+        homeBtn = this.findViewById(R.id.homeBtn);
+        homeBtn.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext().getApplicationContext(),MainActivity.class);
+                getContext().getApplicationContext().startActivity(intent);
+            }
+        });
+        searchBtn = this.findViewById(R.id.searchBtn);
+        messageBtn = this.findViewById(R.id.messageBtn);
+        alertBtn = this.findViewById(R.id.alertBtn);
+        alertBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext().getApplicationContext(),Alerts.class);
+                getContext().getApplicationContext().startActivity(intent);
+            }
+        });
     }
 }

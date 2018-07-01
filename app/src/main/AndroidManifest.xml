@@ -20,10 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Model.AuthenticationWebView" />
-        <activity android:name=".Userprofile"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:screenOrientation="landscape" android:configChanges="keyboardHidden|orientation">
+        <activity android:name=".Userprofile">
         </activity>
+        <activity android:name=".Alerts" />
     </application>
 
 </manifest>
