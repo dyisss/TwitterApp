@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.example.twitterapp.Alerts;
 import com.example.twitterapp.MainActivity;
 import com.example.twitterapp.R;
+import com.example.twitterapp.SearchActivity;
 
 /**
  * Created by Kyle on 30-Jun-18.
@@ -53,6 +54,13 @@ public class TwitterButtons extends LinearLayout {
             }
         });
         searchBtn = this.findViewById(R.id.searchBtn);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(getContext().getApplicationContext(),SearchActivity.class);
+                getContext().getApplicationContext().startActivity(searchIntent);
+            }
+        });
         alertBtn = this.findViewById(R.id.alertBtn);
         alertBtn.setOnClickListener(new OnClickListener() {
             @Override

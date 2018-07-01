@@ -71,18 +71,18 @@ public class MainActivity extends Activity implements Observer {
         tweetList.setAdapter(tweetListAdapter);
         if (TweetSampleDataProvider.tweetsTimeline != null) {
 
-        fillList(tweetslist);
+            fillList(tweetslist);
 
-        if(TweetSampleDataProvider.tweetsTimeline!=null){
-            tweetListAdapter.notifyDataSetChanged();
-            tweetList.invalidate();
-        }
-        SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
-        authentication.setAuthorized(mSharedPreferences.getBoolean(AUTHORISED,false));
-        if (authentication.isAuthorized()){
-            authentication.loggedIn_AccessToken(mSharedPreferences.getString(ACCESS_TOKEN, ""),
-                    mSharedPreferences.getString(ACCESS_TOKEN_SECRET, ""));
-        }
+            if (TweetSampleDataProvider.tweetsTimeline != null) {
+                tweetListAdapter.notifyDataSetChanged();
+                tweetList.invalidate();
+            }
+            SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
+            authentication.setAuthorized(mSharedPreferences.getBoolean(AUTHORISED, false));
+            if (authentication.isAuthorized()) {
+                authentication.loggedIn_AccessToken(mSharedPreferences.getString(ACCESS_TOKEN, ""),
+                        mSharedPreferences.getString(ACCESS_TOKEN_SECRET, ""));
+            }
 //        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -94,54 +94,46 @@ public class MainActivity extends Activity implements Observer {
 //            }
 //        });
 
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent searchIntent = new Intent(MainActivity.this,SearchActivity.class);
-                startActivity(searchIntent);
-            }
-        });
 
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //add intent to access user profile
-                Intent intent = new Intent(MainActivity.this, Userprofile.class);
-                startActivity(intent);
-            }
-        });
-        mPost = findViewById(R.id.mPost);
-        mPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText edittext = new EditText(getBaseContext());
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Post a Tweet.")
-                        .setMessage("Please enter up to 140 characters.")
-                        .setView(edittext)
-                        .setPositiveButton("Post", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Editable YouEditTextValue = edittext.getText();
-                                while (YouEditTextValue.length() > 140) {
-                                    Toast.makeText(MainActivity.this, "Character limit passed", Toast.LENGTH_SHORT).show();
+            userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //add intent to access user profile
+                    Intent intent = new Intent(MainActivity.this, Userprofile.class);
+                    startActivity(intent);
+                }
+            });
+            mPost = findViewById(R.id.mPost);
+            mPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final EditText edittext = new EditText(getBaseContext());
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Post a Tweet.")
+                            .setMessage("Please enter up to 140 characters.")
+                            .setView(edittext)
+                            .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Editable YouEditTextValue = edittext.getText();
+                                    while (YouEditTextValue.length() > 140) {
+                                        Toast.makeText(MainActivity.this, "Character limit passed", Toast.LENGTH_SHORT).show();
+                                    }
+                                    String text = String.valueOf(YouEditTextValue);
+                                    authentication.postTweet(text);
+
                                 }
-                                String text = String.valueOf(YouEditTextValue);
-                                authentication.postTweet(text);
-
-                            }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                })
-                        .show();
-                Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(searchIntent);
-            }
-        });
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                            .show();
+                }
+            });
+        }
     }
 
 
