@@ -148,6 +148,41 @@ public class OpenAuthentication extends Observable {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
+
+        @SuppressLint("NewApi")
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            String baseUrl = "https://api.twitter.com/1.1/search/tweets.json?count=50&q=";
+
+            try{
+                String encodedSearchTerm = URLEncoder.encode(strings[0], "utf-8");
+                baseUrl += encodedSearchTerm;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+
+            request = new OAuthRequest(Verb.GET, baseUrl);
+            service.signRequest(accessToken , request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()){
+                    res = response.getBody();
+                    Log.d("response",res);
+                }
+                TweetSampleDataProvider.tweetsSearched.clear();
+                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+            return null;
+        }
+    }
+
     private class setPostTweet extends AsyncTask<String,Void,Void>{
 
         @Override
@@ -211,34 +246,10 @@ public class OpenAuthentication extends Observable {
 
     }
 
-    @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void searchTweets(String query){
-
-        String baseUrl = "https://api.twitter.com/1.1/search/tweets.json?count=50&q=";
-
-        try{
-            String encodedSearchTerm = URLEncoder.encode(query, "utf-8");
-            baseUrl += encodedSearchTerm;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-
-        request = new OAuthRequest(Verb.GET, baseUrl);
-        service.signRequest(accessToken , request);
-        Response response = null;
-        try {
-            response = service.execute(request);
-            if (response.isSuccessful()){
-                res = response.getBody();
-                Log.d("response",res);
-            }
-            TweetSampleDataProvider.tweetsSearched.clear();
-            TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
-        }catch (Exception e) {
-            Log.d(TAG, e.toString()) ;
-        }
+        getSearchedTweetsTask get = new getSearchedTweetsTask();
+        get.execute(query);
     }
 
     public void postTweet(String text){
