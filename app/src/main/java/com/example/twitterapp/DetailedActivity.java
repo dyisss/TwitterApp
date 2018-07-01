@@ -17,6 +17,7 @@ import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
 import com.example.twitterapp.Model.User;
+import com.example.twitterapp.View.TweetView;
 import com.example.twitterapp.View.TwitterButtons;
 import com.squareup.picasso.Picasso;
 
@@ -42,6 +43,7 @@ public class DetailedActivity extends Activity implements Observer {
     private ImageView userImage;
     private ImageView mPost;
     private TwitterButtons twitterButtons;
+    private TweetView tweetView;
 
     //current user
     public static User current;
@@ -58,8 +60,14 @@ public class DetailedActivity extends Activity implements Observer {
         tweetList = findViewById(R.id.detailedtweetlist);
         userImage = findViewById(R.id.acUserimage);
         mSearchBtn = findViewById(R.id.searchBtn);
+        tweetView = findViewById(R.id.tweetView);
 
         int index = getIntent().getIntExtra("MainActivity", -1);
+        Tweet tweet = tweetslist.get(index);
+
+        tweetView.setTweet(tweet.getText());
+        tweetView.setTweetUsername(tweet.getUser().getScreen_name());
+        tweetView.setTweetName(tweet.getUser().getName());
 
         authentication.getRetweetReactions(tweetslist.get(index).getId());
         fillList(TweetSampleDataProvider.tweetsDetailed);
