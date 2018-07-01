@@ -55,14 +55,16 @@ public class SearchActivity extends AppCompatActivity implements Observer{
                     @Override
                     public boolean onQueryTextSubmit(String s) {
                         authentication.searchTweets(s);
-                        tweetList.setAdapter(tweetListAdapter);
+                        TweetListAdapter tweetListSearchedAdapter = new TweetListAdapter(SearchActivity.this, R.layout.tweet, TweetSampleDataProvider.tweetsSearched);
+                        tweetList.setAdapter(tweetListSearchedAdapter);
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String s) {
                         authentication.searchTweets(s);
-                        tweetList.setAdapter(tweetListAdapter);
+                        TweetListAdapter tweetListSearchedAdapter = new TweetListAdapter(SearchActivity.this, R.layout.tweet, TweetSampleDataProvider.tweetsSearched);
+                        tweetList.setAdapter(tweetListSearchedAdapter);
                         return false;
                     }
                 }
