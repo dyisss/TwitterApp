@@ -31,18 +31,22 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer {
+public class MainActivity extends Activity implements Observer {
     private ListView tweetList;
     private final String TAG = "mainactivity";
     public static ArrayList<Tweet> tweetslist =TweetSampleDataProvider.tweetsTimeline ;
     private TweetListAdapter tweetListAdapter;
-    private String content;
+    private Activity activity;
 
-    //ImageViews
-    private ImageView homeBtn;
-    private ImageView searchBtn;
-    private ImageView messageBtn;
-    private ImageView alertBtn;
+    //imageView
+    private ImageView mHomeBtn;
+    private ImageView mSearchBtn ;
+    private ImageView mMessageBtn ;
+    private ImageView mAlertBtn ;
+    private ImageView userImage;
+    private ImageView mPost;
+    private TwitterButtons twitterButtons;
+
 
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
@@ -51,12 +55,21 @@ public class MainActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setting up Timeline
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
-        searchBtn = findViewById(R.id.searchBtn);
-        authorisationIntent();
+        userImage = findViewById(R.id.acUserimage);
+        mSearchBtn = findViewById(R.id.searchBtn);
+        twitterButtons = findViewById(R.id.hTwitterButtons);
+        if(!authentication.isAuthorized()){
+        authorisationIntent();}
+
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
+        if(TweetSampleDataProvider.tweetsTimeline!=null){
+            tweetListAdapter.notifyDataSetChanged();
+            tweetList.invalidate();
+        }
 //        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -67,9 +80,42 @@ public class MainActivity extends AppCompatActivity implements Observer {
 //            }
 //        });
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //add intent to access user profile
+                Intent intent = new Intent(MainActivity.this,Userprofile.class);
+                startActivity(intent);
+            }
+        });
+        mPost = findViewById(R.id.mPost);
+        mPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText edittext = new EditText(getBaseContext());
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Post a Tweet.")
+                        .setMessage("Please enter up to 140 characters.")
+                        .setView(edittext)
+                        .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Editable YouEditTextValue = edittext.getText();
+                                while(YouEditTextValue.length()>140){
+                                    Toast.makeText(MainActivity.this,"Character limit passed",Toast.LENGTH_SHORT).show();
+                                }
+                                String text = String.valueOf(YouEditTextValue);
+                                authentication.postTweet(text);
+
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
                 Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(searchIntent);
             }
@@ -94,8 +140,18 @@ public class MainActivity extends AppCompatActivity implements Observer {
         if (authentication.isAuthorized()) {
             authentication.addObserver(this);
             authentication.callTweetTask();
+            authentication.callProfileTimeline();
+            authentication.callMentionsTimeline();
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
+            authentication.setUser();
+            if(TweetSampleDataProvider.currentUser!=null) {
+                Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);
+                userImage.invalidate();
+                tweetListAdapter.notifyDataSetChanged();
+                tweetList.invalidate();
+                authentication.callMentionsTimeline();
+            }
         }else{
             authorisationIntent();
         }
@@ -104,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
+        tweetListAdapter.notifyDataSetChanged();
+        tweetList.invalidate();
     }
 }
 

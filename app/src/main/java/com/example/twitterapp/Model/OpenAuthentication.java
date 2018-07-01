@@ -110,28 +110,6 @@ public class OpenAuthentication extends Observable {
         return str_access_token_secret;
     }
 
-    private class DownloadTwitterTask extends AsyncTask<String, Void, String> {
-        final static String CONSUMER_KEY = "MY CONSUMER KEY";
-        final static String CONSUMER_SECRET = "MY CONSUMER SECRET";
-        final static String TwitterTokenURL = "https://api.twitter.com/oauth2/token";
-        final static String TwitterStreamURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
-
-        @Override
-        protected String doInBackground(String... screenNames) {
-            String result = null;
-
-            if (screenNames.length > 0) {
-                result = getTwitterStream(screenNames[0]);
-                screenUserName = result;
-            }
-            return result;
-        }
-
-        private String getTwitterStream(String screenName) {
-            return screenName;
-        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private  class getTweetsTask extends AsyncTask<Void, Void, Void>{
         @Override
@@ -168,6 +146,7 @@ public class OpenAuthentication extends Observable {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
 
         @SuppressLint("NewApi")
@@ -202,8 +181,162 @@ public class OpenAuthentication extends Observable {
         }
     }
 
+    private class setPostTweet extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/statuses/update.json?status=";
+            String input = strings[0];
+            input = input.replace(" ","%20");
+            input = input.replace("#","%23");
+
+            request = new OAuthRequest(Verb.POST,url+input);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
+
+    @SuppressLint("StaticFieldLeak")
+    private class setCurrentUserTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //  DownloadTwitterTask dt = new DownloadTwitterTask();
+            // dt.execute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            notifyObservers();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
+            service.signRequest(accessToken , request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()){
+                    res = response.getBody();
+                    Log.d("response",res);
+                }
+                TweetSampleDataProvider.setCurrentUser("{\"user\":"+res+"}");
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+            return null;
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void searchTweets(String query){
         getSearchedTweetsTask get = new getSearchedTweetsTask();
         get.execute(query);
+    }
+
+    public void postTweet(String text){
+        setPostTweet post = new setPostTweet();
+        post.execute(text);
+    }
+
+    public void setUser(){
+        setCurrentUserTask user = new setCurrentUserTask();
+        user.execute();
+    }
+
+    private class getProfileTimeline extends  AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //  DownloadTwitterTask dt = new DownloadTwitterTask();
+            // dt.execute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            notifyObservers();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/user_timeline.json");
+            service.signRequest(accessToken, request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.profileTimeline.clear();
+                TweetSampleDataProvider.parseProfileTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.profileTimeline);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+            return null;
+        }
+    }
+
+    public void callProfileTimeline(){
+       getProfileTimeline time = new getProfileTimeline();
+       time.execute();
+    }
+
+    private class getMentionTimeline extends  AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //  DownloadTwitterTask dt = new DownloadTwitterTask();
+            // dt.execute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            notifyObservers();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/mentions_timeline.json");
+            service.signRequest(accessToken, request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.mentionTimeline.clear();
+                TweetSampleDataProvider.parseMentionTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.mentionTimeline);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+            return null;
+        }
+    }
+
+    public void callMentionsTimeline(){
+        getMentionTimeline timeline = new getMentionTimeline();
+        timeline.execute();
     }
 }

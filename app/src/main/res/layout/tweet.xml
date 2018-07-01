@@ -12,7 +12,7 @@
         android:layout_width="42dp"
         android:layout_height="22dp"
         android:layout_alignTop="@+id/favoritebtn"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/favoritebtn"
         android:contentDescription="@string/retweet_android_string_videoview_error_button"
@@ -26,25 +26,25 @@
         android:layout_height="22dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tweetText"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/favorite_android_string_videoview_error_button"
         app:layout_constraintStart_toEndOf="@+id/retweetbtn"
         app:layout_constraintTop_toBottomOf="@+id/tweetText"
-        app:srcCompat="@drawable/like" />
+        android:src="@drawable/like" />
 
     <TextView
         android:id="@+id/tweetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/twitterlogo"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:text="@string/tweet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tweetProfileImage" />
+        app:layout_constraintTop_toBottomOf="@+id/tweetName" />
 
     <TextView
         android:id="@+id/tweetUsername"
@@ -68,10 +68,10 @@
         android:layout_alignBaseline="@+id/tweetUsername"
         android:layout_alignBottom="@+id/tweetUsername"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/name"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tweetProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -79,27 +79,25 @@
         android:layout_width="0dp"
         android:layout_height="23dp"
         android:layout_alignTop="@+id/retweetbtn"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/retweetbtn"
         android:contentDescription="@string/reply_android_string_videoview_error_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tweetText"
-        app:srcCompat="@drawable/reply" />
+        android:src="@drawable/reply" />
 
     <ImageView
         android:id="@+id/tweetProfileImage"
-        android:layout_width="39dp"
-        android:layout_height="29dp"
+        android:layout_width="44dp"
+        android:layout_height="41dp"
         android:layout_alignEnd="@+id/tweetName"
         android:layout_below="@+id/tweetName"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tweetName"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@android:drawable/btn_dialog" />
 
     <TextView
         android:id="@+id/tweetDate"

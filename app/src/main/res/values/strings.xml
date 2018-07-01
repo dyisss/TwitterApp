@@ -7,4 +7,10 @@
     <string name="username">UserName</string>
     <string name="tweet">Tweet</string>
     <string name="logo_of_twitter">logo of Twitter</string>
+    <string name="follower">Follower</string>
+    <string name="tar"><![CDATA[Tweets&replies]]></string>
+    <string name="all">All</string>
+    <string name="mentions">Mentions</string>
+    <string name="notifications">Notifications</string>
+    <string name="following">Following</string>
 </resources>

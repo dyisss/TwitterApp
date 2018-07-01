@@ -22,6 +22,9 @@
         </activity>
         <activity android:name=".Model.AuthenticationWebView" />
         <activity android:name=".SearchActivity" />
+        <activity android:name=".Userprofile">
+        </activity>
+        <activity android:name=".Alerts" />
     </application>
 
 </manifest>
