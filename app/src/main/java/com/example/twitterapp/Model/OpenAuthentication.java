@@ -185,20 +185,12 @@ public class OpenAuthentication extends Observable {
 
         @Override
         protected Void doInBackground(String... strings) {
-            String url = "http://api.twitter.com/1.1/statuses/update.json?status=";
-            for (int i = 0; i < strings.length; i++) {
-                if(strings.length<=1) {
-                    url += strings[i];
-                }else{
-                    url += strings[i] + "%20";
-                }
+            String url = "https://api.twitter.com/1.1/statuses/update.json?status=";
+            String input = strings[0];
+            input = input.replace(" ","%20");
+            input = input.replace("#","%23");
 
-                if (i != strings.length -  1){
-                    url += "&";
-                }
-            }
-
-            request = new OAuthRequest(Verb.POST,url);
+            request = new OAuthRequest(Verb.POST,url+input);
             service.signRequest(accessToken,request);
             Response response = null;
             try {
