@@ -1,40 +1,31 @@
 package com.example.twitterapp;
 
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.AuthenticationWebView;
 import com.example.twitterapp.Model.OpenAuthentication;
-import com.example.twitterapp.Model.SearchMetaData;
-import com.example.twitterapp.Model.Status;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
-import com.github.scribejava.core.model.OAuth1AccessToken;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer {
+/**
+ * Created by yang- on 01/07/2018.
+ */
+
+public class SearchActivity extends AppCompatActivity implements Observer{
     private ListView tweetList;
     private final String TAG = "mainactivity";
-    public static ArrayList<Tweet> tweetslist =TweetSampleDataProvider.tweetsTimeline ;
+    public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsTimeline ;
     private TweetListAdapter tweetListAdapter;
     private String content;
 
@@ -44,41 +35,43 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private ImageView messageBtn;
     private ImageView alertBtn;
 
+    //searchView
+    private SearchView svSearch;
+
     final OpenAuthentication authentication = OpenAuthentication.getInstance();
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.search_activity);
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
-        searchBtn = findViewById(R.id.searchBtn);
+        svSearch = findViewById(R.id.svSearch);
         authorisationIntent();
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
-//        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent detailedTweet = new Intent(MainActivity.this,DetailedTweet.class);
-//                detailedTweet.putExtra(INDEX,i);
-//                detailedTweet.putExtra(TAG,"MainActivity");
-//                startActivity(detailedTweet);
-//            }
-//        });
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(searchIntent);
-            }
-        });
+        svSearch.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        authentication.searchTweets(s);
+                        tweetList.setAdapter(tweetListAdapter);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        authentication.searchTweets(s);
+                        tweetList.setAdapter(tweetListAdapter);
+                        return false;
+                    }
+                }
+        );
     }
 
-
     public void authorisationIntent() {
-        Intent authIntent = new Intent(MainActivity.this, AuthenticationWebView.class);
+        Intent authIntent = new Intent(SearchActivity.this, AuthenticationWebView.class);
         startActivity(authIntent);
     }
 
@@ -106,6 +99,3 @@ public class MainActivity extends AppCompatActivity implements Observer {
         super.onPause();
     }
 }
-
-
-

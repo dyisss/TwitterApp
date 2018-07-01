@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Model.AuthenticationWebView" />
+        <activity android:name=".SearchActivity" />
     </application>
 
 </manifest>
