@@ -70,6 +70,10 @@ public class MainActivity extends Activity implements Observer {
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
         if (TweetSampleDataProvider.tweetsTimeline != null) {
+
+        fillList(tweetslist);
+
+        if(TweetSampleDataProvider.tweetsTimeline!=null){
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
         }
@@ -83,6 +87,7 @@ public class MainActivity extends Activity implements Observer {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Intent detailedTweet = new Intent(MainActivity.this,DetailedTweet.class);
+
 //                detailedTweet.putExtra(INDEX,i);
 //                detailedTweet.putExtra(TAG,"MainActivity");
 //                startActivity(detailedTweet);
@@ -175,6 +180,7 @@ public class MainActivity extends Activity implements Observer {
             }
         } else {
             authorisationIntent();
+            fillList(tweetslist);
         }
     }
 
@@ -218,6 +224,11 @@ public class MainActivity extends Activity implements Observer {
         mEditor.commit();
         authorisationIntent();
 
+    }
+
+    private void fillList(ArrayList<Tweet> tweets){
+        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweets);
+        tweetList.setAdapter(tweetListAdapter);
     }
 }
 

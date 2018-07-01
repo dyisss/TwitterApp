@@ -47,7 +47,6 @@ public class SearchActivity extends AppCompatActivity implements Observer{
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
         svSearch = findViewById(R.id.svSearch);
-        authorisationIntent();
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
 
