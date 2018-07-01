@@ -1,5 +1,6 @@
 package com.example.twitterapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,12 +25,12 @@ import java.util.Observer;
  * Created by yang- on 01/07/2018.
  */
 
-public class SearchActivity extends AppCompatActivity implements Observer{
+public class SearchActivity extends Activity implements Observer{
     private ListView tweetList;
     private final String TAG = "mainactivity";
     public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsSearched ;
     private TweetListAdapter tweetListAdapter;
-    private String content;
+
 
     //imageView
     private ImageView mSearchBtn;
@@ -99,7 +100,6 @@ public class SearchActivity extends AppCompatActivity implements Observer{
         super.onResume();
         if (authentication.isAuthorized()) {
             authentication.addObserver(this);
-            authentication.callTweetTask();
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
         }else{

@@ -36,9 +36,7 @@ public class Userprofile extends Activity {
     private TextView  followerCount;
     private TextView  pUserBio;
     private TextView  pLikes;
-    private TextView  pReplies;
     private TextView  pTweetsLabel;
-    private TextView  pMedia;
     private ListView pTweetList;
     private ProfileTweetListAdapter adapter;
     private TwitterButtons twitterButtons;
@@ -84,6 +82,25 @@ public class Userprofile extends Activity {
 
         pTweetList.setAdapter(adapter);
 
+        pTweetsLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter = new ProfileTweetListAdapter(Userprofile.this,R.layout.tweet,TweetSampleDataProvider.profileTimeline);
+                pTweetList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                pTweetList.invalidate();
+            }
+        });
+
+        pLikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter = new ProfileTweetListAdapter(Userprofile.this,R.layout.tweet,TweetSampleDataProvider.favoriteTimeline);
+                pTweetList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                pTweetList.invalidate();
+            }
+        });
         post = findViewById(R.id.pPost);
         post.setOnClickListener(new View.OnClickListener() {
             @Override

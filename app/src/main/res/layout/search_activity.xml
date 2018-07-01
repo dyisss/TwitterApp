@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/grey_50">
 
     <ListView
         android:id="@+id/tweetsList"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
@@ -20,12 +21,13 @@
 
     <SearchView
         android:id="@+id/svSearch"
-        android:layout_width="384dp"
+        android:layout_width="0dp"
         android:layout_height="54dp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/grey_300"/>
 
     <com.example.twitterapp.View.TwitterButtons
         android:id="@+id/twitterButtons2"

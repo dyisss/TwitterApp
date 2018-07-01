@@ -16,16 +16,18 @@ import java.util.List;
 
 public class TweetSampleDataProvider {
 
-    public static ArrayList<Tweet>tweetsSearched;
-    public static ArrayList<Tweet>tweetsTimeline;
+    public static ArrayList<Tweet> tweetsSearched;
+    public static ArrayList<Tweet> tweetsTimeline;
+    public static ArrayList<Tweet> detailedTweets;
+    public static ArrayList<Tweet> profileTimeline;
+    public static ArrayList<Tweet> mentionTimeline;
     public static ArrayList<Tweet>tweetsDetailed;
-    public static ArrayList<Tweet>profileTimeline;
-    public static ArrayList<Tweet>mentionTimeline;
     public static User currentUser;
     public static ArrayList<User> usersSearched;
     public static ArrayList<User> userFollowers;
+    public static ArrayList<Tweet> favoriteTimeline;
 
-    static{
+    static {
         tweetsSearched = new ArrayList<>();
         tweetsTimeline = new ArrayList<>();
         tweetsDetailed = new ArrayList<>();
@@ -33,15 +35,16 @@ public class TweetSampleDataProvider {
         profileTimeline = new ArrayList<>();
         mentionTimeline = new ArrayList<>();
         userFollowers = new ArrayList<>();
+        favoriteTimeline = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void parseJSONData(String jsonString, List<Tweet> tweetList){
-        try{
+    public static void parseJSONData(String jsonString, List<Tweet> tweetList) {
+        try {
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray statusesArray = jsonObject.getJSONArray("statuses");
-           if(tweetList.size()<statusesArray.length()){
-                for(int i = 0 ; i <statusesArray.length() ; i++){
+            if (tweetList.size() < statusesArray.length()) {
+                for (int i = 0; i < statusesArray.length(); i++) {
                     JSONObject tweetObject = statusesArray.getJSONObject(i);
                     Tweet tweet = new Tweet(tweetObject);
                     tweetList.add(tweet);
@@ -52,10 +55,10 @@ public class TweetSampleDataProvider {
         }
     }
 
-    public static void setCurrentUser(String jsonString){
+    public static void setCurrentUser(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
-            if(currentUser==null) {
+            if (currentUser == null) {
                 currentUser = new User((JSONObject) jsonObject.get("user"));
                 currentUser.setProfile_image_url(currentUser.getProfile_image_url());
                 currentUser.setId_str(currentUser.getId_str());
@@ -68,11 +71,11 @@ public class TweetSampleDataProvider {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void parseProfileTimelineData(String jsonString, List<Tweet> tweetList){
+    public static void parseProfileTimelineData(String jsonString, List<Tweet> tweetList) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray statusesArray = jsonObject.getJSONArray("statuses");
-            if(tweetList.size()<statusesArray.length()) {
+            if (tweetList.size() < statusesArray.length()) {
                 for (int i = 0; i < statusesArray.length(); i++) {
                     JSONObject tweetObject = statusesArray.getJSONObject(i);
                     Tweet tweet = new Tweet(tweetObject);
@@ -101,6 +104,7 @@ public class TweetSampleDataProvider {
             e.printStackTrace();
         }
     }
+
     public static void parseUserFriendsData(String jsonString, List<User> userList) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -110,6 +114,23 @@ public class TweetSampleDataProvider {
                     JSONObject userObject = usersArray.getJSONObject(i);
                     User user = new User(userObject);
                     userList.add(user);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void parseFavoriteTimeline(String jsonString, List<Tweet> tweetList) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray statusesArray = jsonObject.getJSONArray("statuses");
+            if (tweetList.size() < statusesArray.length()) {
+                for (int i = 0; i < statusesArray.length(); i++) {
+                    JSONObject tweetObject = statusesArray.getJSONObject(i);
+                    Tweet tweet = new Tweet(tweetObject);
+                    tweetList.add(tweet);
                 }
             }
         } catch (JSONException e) {

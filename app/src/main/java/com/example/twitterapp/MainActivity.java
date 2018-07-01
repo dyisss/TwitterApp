@@ -163,6 +163,7 @@ public class MainActivity extends Activity implements Observer {
             authentication.callProfileTimeline();
             authentication.callMentionsTimeline();
             authentication.setUser();
+            authentication.FavoriteTimeline();
             if (TweetSampleDataProvider.currentUser != null) {
                 current = TweetSampleDataProvider.currentUser;
                 Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);

@@ -514,4 +514,44 @@ public class OpenAuthentication extends Observable {
         }
     }
 
+    public void FavoriteTimeline(){
+        getFavoriteTimeline task = new getFavoriteTimeline();
+        task.execute();
+    }
+
+    private class getFavoriteTimeline extends  AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //  DownloadTwitterTask dt = new DownloadTwitterTask();
+            // dt.execute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            notifyObservers();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/favorites/list.json");
+            service.signRequest(accessToken, request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.favoriteTimeline.clear();
+                TweetSampleDataProvider.parseFavoriteTimeline("{\"statuses\":" + res + "}", TweetSampleDataProvider.favoriteTimeline);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+            return null;
+        }
+    }
+
 }

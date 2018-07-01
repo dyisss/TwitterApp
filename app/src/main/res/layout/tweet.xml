@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <ImageView
@@ -19,7 +20,7 @@
         app:layout_constraintStart_toEndOf="@+id/replybtn"
         app:layout_constraintTop_toBottomOf="@+id/tweetText"
         android:src="@drawable/retweet2"
-        android:focusable="true"/>
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/likebtn"
@@ -33,7 +34,7 @@
         app:layout_constraintStart_toEndOf="@+id/retweetbtn"
         app:layout_constraintTop_toBottomOf="@+id/tweetText"
         android:src="@drawable/like"
-        android:focusable="true"/>
+        android:clickable="true"/>
 
     <TextView
         android:id="@+id/tweetText"
@@ -88,7 +89,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tweetText"
         android:src="@drawable/reply"
-        android:focusable="true"/>
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/tweetProfileImage"
