@@ -1,25 +1,14 @@
 package com.example.twitterapp;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.AuthenticationWebView;
@@ -34,7 +23,11 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends Activity implements Observer {
+/**
+ * Created by yang- on 01/07/2018.
+ */
+
+public class DetailedActivity extends AppCompatActivity implements Observer {
     private static final String AUTHORISED = "authorised";
     private static final String ACCESS_TOKEN = "Access Token";
     private static final String ACCESS_TOKEN_SECRET = "Access Token Secret";
@@ -56,91 +49,24 @@ public class MainActivity extends Activity implements Observer {
 
     public final static OpenAuthentication authentication = OpenAuthentication.getInstance();
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //setting up Timeline
+        setContentView(R.layout.detailed_tweet);
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
         userImage = findViewById(R.id.acUserimage);
         mSearchBtn = findViewById(R.id.searchBtn);
-        tweetList.invalidate();
-        twitterButtons = findViewById(R.id.hTwitterButtons);
-        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
-        tweetList.setAdapter(tweetListAdapter);
-        if (TweetSampleDataProvider.tweetsTimeline != null) {
 
-            fillList(tweetslist);
+        int index = getIntent().getIntExtra("mainactivity", -1);
 
-            if (TweetSampleDataProvider.tweetsTimeline != null) {
-                tweetListAdapter.notifyDataSetChanged();
-                tweetList.invalidate();
-            }
-            SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
-            authentication.setAuthorized(mSharedPreferences.getBoolean(AUTHORISED, false));
-            if (authentication.isAuthorized()) {
-                authentication.loggedIn_AccessToken(mSharedPreferences.getString(ACCESS_TOKEN, ""),
-                        mSharedPreferences.getString(ACCESS_TOKEN_SECRET, ""));
-            }
-        tweetList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("detailclick", "fuck");
-
-                Intent detailedTweet = new Intent(MainActivity.this,DetailedActivity.class);
-
-                detailedTweet.putExtra("MainActivity",i);
-                startActivity(detailedTweet);
-            }
-        });
-
-
-            userImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //add intent to access user profile
-                    Intent intent = new Intent(MainActivity.this, Userprofile.class);
-                    startActivity(intent);
-                }
-            });
-            mPost = findViewById(R.id.mPost);
-            mPost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final EditText edittext = new EditText(getBaseContext());
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("Post a Tweet.")
-                            .setMessage("Please enter up to 140 characters.")
-                            .setView(edittext)
-                            .setPositiveButton("Post", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Editable YouEditTextValue = edittext.getText();
-                                    while (YouEditTextValue.length() > 140) {
-                                        Toast.makeText(MainActivity.this, "Character limit passed", Toast.LENGTH_SHORT).show();
-                                    }
-                                    String text = String.valueOf(YouEditTextValue);
-                                    authentication.postTweet(text);
-
-                                }
-                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                            .show();
-                }
-            });
-        }
+        authentication.getRetweetReactions(tweetslist.get(index).getId());
+        TweetListAdapter tweetListSearchedAdapter = new TweetListAdapter(DetailedActivity.this, R.layout.tweet, TweetSampleDataProvider.tweetsDetailed);
+        tweetList.setAdapter(tweetListSearchedAdapter);
     }
 
-
     public void authorisationIntent() {
-        Intent authIntent = new Intent(MainActivity.this, AuthenticationWebView.class);
+        Intent authIntent = new Intent(DetailedActivity.this, AuthenticationWebView.class);
         startActivity(authIntent);
     }
 
@@ -187,7 +113,7 @@ public class MainActivity extends Activity implements Observer {
 
     @Override
     protected void onStop() {
-        SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(DetailedActivity.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
 
         if (authentication.isAuthorized()){
@@ -208,7 +134,7 @@ public class MainActivity extends Activity implements Observer {
 
 
     public void SignOut(View view) {
-        SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(DetailedActivity.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         if(authentication.isAuthorized()) {
             mEditor.putBoolean(AUTHORISED, false);
@@ -217,7 +143,6 @@ public class MainActivity extends Activity implements Observer {
         }
         mEditor.commit();
         authorisationIntent();
-
     }
 
     private void fillList(ArrayList<Tweet> tweets){
@@ -225,6 +150,3 @@ public class MainActivity extends Activity implements Observer {
         tweetList.setAdapter(tweetListAdapter);
     }
 }
-
-
-

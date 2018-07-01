@@ -16,7 +16,6 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Observable;
@@ -147,6 +146,31 @@ public class OpenAuthentication extends Observable {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    private class getRetweetsReactionsTask extends AsyncTask<String, Void, Void>{
+
+        @SuppressLint("NewApi")
+        @Override
+        protected Void doInBackground(String... strings) {
+
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/retweets/"+ strings[0] +".json");
+            service.signRequest(accessToken , request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()){
+                    res = response.getBody();
+                    Log.d("response",res);
+                }
+                TweetSampleDataProvider.tweetsDetailed.clear();
+                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsDetailed);
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+            return null;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
 
         @SuppressLint("NewApi")
@@ -242,6 +266,12 @@ public class OpenAuthentication extends Observable {
             return null;
         }
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+    public void getRetweetReactions(String id){
+        getRetweetsReactionsTask get = new getRetweetsReactionsTask();
+        get.execute(id);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -13,6 +14,7 @@ import com.example.twitterapp.Model.AuthenticationWebView;
 import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
+import com.example.twitterapp.View.TwitterButtons;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -29,12 +31,11 @@ public class SearchActivity extends AppCompatActivity implements Observer{
     private TweetListAdapter tweetListAdapter;
     private String content;
 
-    //ImageViews
-    private ImageView homeBtn;
-    private ImageView searchBtn;
-    private ImageView messageBtn;
-    private ImageView alertBtn;
-
+    //imageView
+    private ImageView mSearchBtn;
+    private ImageView userImage;
+    private ImageView mPost;
+    private TwitterButtons twitterButtons;
     //searchView
     private SearchView svSearch;
 
@@ -46,6 +47,8 @@ public class SearchActivity extends AppCompatActivity implements Observer{
         setContentView(R.layout.search_activity);
         authentication.addObserver(this);
         tweetList = findViewById(R.id.tweetsList);
+        userImage = findViewById(R.id.acUserimage);
+        mSearchBtn = findViewById(R.id.searchBtn);
         svSearch = findViewById(R.id.svSearch);
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
         tweetList.setAdapter(tweetListAdapter);
@@ -69,6 +72,15 @@ public class SearchActivity extends AppCompatActivity implements Observer{
                     }
                 }
         );
+
+//        userImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //add intent to access user profile
+//                Intent intent = new Intent(SearchActivity.this, Userprofile.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     public void authorisationIntent() {
