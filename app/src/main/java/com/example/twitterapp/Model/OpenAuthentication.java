@@ -37,8 +37,6 @@ public class OpenAuthentication extends Observable {
     private String str_access_token_secret;
     private OAuthRequest request;
     private String res = null;
-    private String TwitterStreamUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
-    private String screenUserName = "BattousaiDyis";
 
     private OpenAuthentication() {
         service = new ServiceBuilder(API_KEY)
@@ -237,8 +235,7 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
+
         }
 
         @Override
@@ -294,8 +291,7 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
+
         }
 
         @Override
@@ -334,8 +330,6 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
         }
 
         @Override
@@ -523,13 +517,11 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+                super.onPostExecute(aVoid);
             notifyObservers();
         }
 

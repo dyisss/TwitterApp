@@ -167,14 +167,14 @@ public class MainActivity extends Activity implements Observer {
                 current = TweetSampleDataProvider.currentUser;
                 Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);
                 userImage.invalidate();
-                tweetListAdapter.notifyDataSetChanged();
-                tweetList.invalidate();
                 authentication.callMentionsTimeline();
                 authentication.friendList(current.getScreen_name());
             }
         } else {
             authorisationIntent();
             fillList(tweetslist);
+            tweetListAdapter.notifyDataSetChanged();
+            tweetList.invalidate();
         }
     }
 
@@ -210,11 +210,7 @@ public class MainActivity extends Activity implements Observer {
     public void SignOut(View view) {
         SharedPreferences mSharedPreferences = getSharedPreferences(MainActivity.PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        if(authentication.isAuthorized()) {
-            mEditor.putBoolean(AUTHORISED, false);
-            mEditor.putString(ACCESS_TOKEN, "");
-            mEditor.putString(ACCESS_TOKEN_SECRET, "");
-        }
+        authentication.setAuthorized(mSharedPreferences.getBoolean(AUTHORISED, false));
         mEditor.commit();
         authorisationIntent();
 
@@ -223,6 +219,8 @@ public class MainActivity extends Activity implements Observer {
     private void fillList(ArrayList<Tweet> tweets){
         tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweets);
         tweetList.setAdapter(tweetListAdapter);
+        tweetListAdapter.notifyDataSetChanged();
+
     }
 }
 

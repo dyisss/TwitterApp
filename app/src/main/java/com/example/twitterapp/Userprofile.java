@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
@@ -135,7 +136,7 @@ public class Userprofile extends Activity {
         pUserImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder ImageDialog = new AlertDialog.Builder(Userprofile.this);
+                android.support.v7.app.AlertDialog.Builder ImageDialog = new AlertDialog.Builder(Userprofile.this);
                 ImageView showImage = new ImageView(Userprofile.this);
                 Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform( )).into(showImage);
                 ImageDialog.setView(showImage);
@@ -144,7 +145,7 @@ public class Userprofile extends Activity {
                     public void onClick(DialogInterface arg0, int arg1) {
                     }
                 });
-                ImageDialog.show();
+               ImageDialog.show();
             }
             });
     }
