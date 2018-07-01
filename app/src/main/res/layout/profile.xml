@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/pUserimage"
@@ -11,9 +12,9 @@
         android:layout_height="46dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.036"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toStartOf="@+id/pPost"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pUserBanner"
         app:srcCompat="@mipmap/ic_launcher_round" />
@@ -129,28 +130,6 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/pReplies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/tar"
-        app:layout_constraintStart_toEndOf="@+id/pTweetsLabel"
-        app:layout_constraintTop_toBottomOf="@+id/followerLabel"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/pMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:text="Media"
-        app:layout_constraintStart_toEndOf="@+id/pReplies"
-        app:layout_constraintTop_toBottomOf="@+id/followerLabel"
-        tools:ignore="HardcodedText" />
-
-    <TextView
         android:id="@+id/pLikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -159,7 +138,8 @@
         android:layout_marginTop="16dp"
         android:text="Likes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pMedia"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/pTweetsLabel"
         app:layout_constraintTop_toBottomOf="@+id/followerLabel"
         tools:ignore="HardcodedText" />
 
@@ -173,7 +153,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pReplies" />
+        app:layout_constraintTop_toBottomOf="@+id/pTweetsLabel" />
 
     <com.example.twitterapp.View.TwitterButtons
         android:id="@+id/twitterButtons4"
@@ -187,5 +167,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pTweetlist"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/pPost"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pUserBanner"
+        android:src ="@drawable/post" />
 
 </android.support.constraint.ConstraintLayout>

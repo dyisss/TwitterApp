@@ -25,7 +25,7 @@ import java.util.Observer;
 public class SearchActivity extends AppCompatActivity implements Observer{
     private ListView tweetList;
     private final String TAG = "mainactivity";
-    public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsTimeline ;
+    public static ArrayList<Tweet> tweetslist = TweetSampleDataProvider.tweetsSearched ;
     private TweetListAdapter tweetListAdapter;
     private String content;
 

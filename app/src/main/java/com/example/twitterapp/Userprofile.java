@@ -1,17 +1,26 @@
 package com.example.twitterapp;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.ProfileTweetListAdapter;
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
 import com.example.twitterapp.View.TwitterButtons;
 import com.squareup.picasso.Picasso;
+
+import static com.example.twitterapp.MainActivity.authentication;
 
 /**
  * Created by Kyle on 08-Jun-18.
@@ -33,11 +42,21 @@ public class Userprofile extends Activity {
     private ListView pTweetList;
     private ProfileTweetListAdapter adapter;
     private TwitterButtons twitterButtons;
+    private ImageView post;
+    private TextView friendlist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+        friendlist = findViewById(R.id.followerLabel);
+        friendlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Userprofile.this,FollowerList.class);
+                startActivity(intent);
+            }
+        });
         pUserImage = findViewById(R.id.pUserimage);
         twitterButtons = findViewById(R.id.twitterButtons4);
         pBanner = findViewById(R.id.pUserBanner);
@@ -48,9 +67,7 @@ public class Userprofile extends Activity {
         followerCount = findViewById(R.id.followerCount);
         pUserBio = findViewById(R.id.pUserBio);
         pLikes = findViewById(R.id.pLikes);
-        pReplies = findViewById(R.id.pReplies);
         pTweetsLabel = findViewById(R.id.pTweetsLabel);
-        pMedia = findViewById(R.id.pMedia);
         pTweetList = findViewById(R.id.pTweetlist);
         adapter = new ProfileTweetListAdapter(this,R.layout.tweet,TweetSampleDataProvider.profileTimeline);
         pUserImage.bringToFront();
@@ -66,5 +83,60 @@ public class Userprofile extends Activity {
         adapter.notifyDataSetChanged();
 
         pTweetList.setAdapter(adapter);
+
+        post = findViewById(R.id.pPost);
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText edittext = new EditText(getBaseContext());
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(Userprofile.this);
+                builder.setTitle("Post a Tweet.")
+                        .setMessage("Please enter up to 140 characters.")
+                        .setView(edittext)
+                        .setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Editable YouEditTextValue = edittext.getText();
+                                while(YouEditTextValue.length()>140){
+                                    Toast.makeText(Userprofile.this,"Character limit passed",Toast.LENGTH_SHORT).show();
+                                }
+                                String text = String.valueOf(YouEditTextValue);
+                                authentication.postTweet(text);
+
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                        .show();
+            }
+        });
+
+        pUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder ImageDialog = new AlertDialog.Builder(Userprofile.this);
+                ImageView showImage = new ImageView(Userprofile.this);
+                Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform( )).into(showImage);
+                ImageDialog.setView(showImage);
+
+                ImageDialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+                ImageDialog.show();
+            }
+            });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        pTweetList.invalidate();
+    }
+
 }

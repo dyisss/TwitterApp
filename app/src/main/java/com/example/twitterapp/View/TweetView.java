@@ -3,6 +3,8 @@ package com.example.twitterapp.View;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +18,9 @@ public class TweetView extends RelativeLayout {
     private TextView tweetName ;
     private TextView tweetUsername ;
     private TextView tweet;
+    private ImageView reply;
+    private ImageView retweet;
+    private ImageView like;
 
 
     public TweetView(Context context) {
@@ -42,6 +47,24 @@ public class TweetView extends RelativeLayout {
         tweetName = findViewById(R.id.tweetName);
         tweetUsername = findViewById(R.id.tweetUsername);
         tweet  = findViewById(R.id.tweetText);
+        reply = findViewById(R.id.replybtn);
+        retweet = findViewById(R.id.retweetbtn);
+        retweet.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                retweet.setImageResource(R.drawable.retweet);
+                retweet.invalidate();
+            }
+        });
+        like = findViewById(R.id.likebtn);
+        like.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                like.setImageResource(R.drawable.like2);
+                like.invalidate();
+            }
+        });
+
     }
 
 
