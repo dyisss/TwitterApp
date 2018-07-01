@@ -69,11 +69,9 @@ public class MainActivity extends Activity implements Observer {
         userImage = findViewById(R.id.acUserimage);
         mSearchBtn = findViewById(R.id.searchBtn);
         twitterButtons = findViewById(R.id.hTwitterButtons);
-        if(!authentication.isAuthorized()){
-        authorisationIntent();}
 
-        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
-        tweetList.setAdapter(tweetListAdapter);
+        fillList(tweetslist);
+
         if(TweetSampleDataProvider.tweetsTimeline!=null){
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
@@ -82,6 +80,7 @@ public class MainActivity extends Activity implements Observer {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Intent detailedTweet = new Intent(MainActivity.this,DetailedTweet.class);
+
 //                detailedTweet.putExtra(INDEX,i);
 //                detailedTweet.putExtra(TAG,"MainActivity");
 //                startActivity(detailedTweet);
@@ -132,8 +131,6 @@ public class MainActivity extends Activity implements Observer {
                     }
                 })
                 .show();
-                Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
-                startActivity(searchIntent);
             }
         });
     }
@@ -170,6 +167,7 @@ public class MainActivity extends Activity implements Observer {
             }
         }else{
             authorisationIntent();
+            fillList(tweetslist);
         }
     }
 
@@ -178,6 +176,11 @@ public class MainActivity extends Activity implements Observer {
         super.onPause();
         tweetListAdapter.notifyDataSetChanged();
         tweetList.invalidate();
+    }
+
+    private void fillList(ArrayList<Tweet> tweets){
+        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweets);
+        tweetList.setAdapter(tweetListAdapter);
     }
 }
 

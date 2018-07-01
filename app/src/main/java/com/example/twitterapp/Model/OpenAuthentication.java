@@ -19,6 +19,8 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Observable;
 
 /**
@@ -146,41 +148,6 @@ public class OpenAuthentication extends Observable {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
-
-        @SuppressLint("NewApi")
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            String url = "https://api.twitter.com/1.1/search/tweets.json?q=";
-            for (int i = 0; i < strings.length; i++) {
-                url += strings[i];
-
-                if (i != strings.length - 1){
-                    url += "&";
-                }
-            }
-
-            request = new OAuthRequest(Verb.GET, url);
-            service.signRequest(accessToken , request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.tweetsSearched.clear();
-                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-
-            return null;
-        }
-    }
-
     private class setPostTweet extends AsyncTask<String,Void,Void>{
 
         @Override
@@ -244,10 +211,34 @@ public class OpenAuthentication extends Observable {
 
     }
 
+    @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void searchTweets(String query){
-        getSearchedTweetsTask get = new getSearchedTweetsTask();
-        get.execute(query);
+
+        String baseUrl = "https://api.twitter.com/1.1/search/tweets.json?count=50&q=";
+
+        try{
+            String encodedSearchTerm = URLEncoder.encode(query, "utf-8");
+            baseUrl += encodedSearchTerm;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        request = new OAuthRequest(Verb.GET, baseUrl);
+        service.signRequest(accessToken , request);
+        Response response = null;
+        try {
+            response = service.execute(request);
+            if (response.isSuccessful()){
+                res = response.getBody();
+                Log.d("response",res);
+            }
+            TweetSampleDataProvider.tweetsSearched.clear();
+            TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
+        }catch (Exception e) {
+            Log.d(TAG, e.toString()) ;
+        }
     }
 
     public void postTweet(String text){
