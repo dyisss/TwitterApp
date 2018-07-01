@@ -1,16 +1,22 @@
 package com.example.twitterapp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.AuthenticationWebView;
@@ -19,7 +25,9 @@ import com.example.twitterapp.Model.SearchMetaData;
 import com.example.twitterapp.Model.Status;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
+import com.example.twitterapp.View.TwitterButtons;
 import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,6 +87,14 @@ public class MainActivity extends Activity implements Observer {
 //                startActivity(detailedTweet);
 //            }
 //        });
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(MainActivity.this,SearchActivity.class);
+                startActivity(searchIntent);
+            }
+        });
 
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
