@@ -13,4 +13,6 @@
     <string name="mentions">Mentions</string>
     <string name="notifications">Notifications</string>
     <string name="following">Following</string>
+    <string name="signout">Signout</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

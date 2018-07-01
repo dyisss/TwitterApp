@@ -23,6 +23,8 @@ public class Tweet {
     private String id ;
     private String text;
     private LocalDateTime created_at;
+    private boolean retweeted;
+    private boolean liked;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -34,6 +36,8 @@ public class Tweet {
             String date =  jsonObject.getString("created_at");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy");
             this.created_at = LocalDateTime.parse(date,formatter);
+            this.retweeted = false;
+            this.liked = false;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -56,5 +60,21 @@ public class Tweet {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getCreated_at() {
         return DateTimeFormatter.ofPattern("dd MMM yyyy").format(created_at);
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

@@ -23,6 +23,7 @@
         <activity android:name=".Userprofile">
         </activity>
         <activity android:name=".Alerts" />
+        <activity android:name=".FollowerList" />
     </application>
 
 </manifest>

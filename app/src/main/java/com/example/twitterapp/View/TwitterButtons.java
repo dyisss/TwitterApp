@@ -53,7 +53,6 @@ public class TwitterButtons extends LinearLayout {
             }
         });
         searchBtn = this.findViewById(R.id.searchBtn);
-        messageBtn = this.findViewById(R.id.messageBtn);
         alertBtn = this.findViewById(R.id.alertBtn);
         alertBtn.setOnClickListener(new OnClickListener() {
             @Override

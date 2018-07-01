@@ -2,7 +2,6 @@ package com.example.twitterapp.Model;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,8 +9,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by Kyle on 22-Jun-18.
@@ -26,6 +23,7 @@ public class TweetSampleDataProvider {
     public static ArrayList<Tweet>mentionTimeline;
     public static User currentUser;
     public static ArrayList<User> usersSearched;
+    public static ArrayList<User> userFollowers;
 
     static{
         tweetsSearched = new ArrayList<>();
@@ -34,6 +32,7 @@ public class TweetSampleDataProvider {
         usersSearched = new ArrayList<>();
         profileTimeline = new ArrayList<>();
         mentionTimeline = new ArrayList<>();
+        userFollowers = new ArrayList<>();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -59,6 +58,7 @@ public class TweetSampleDataProvider {
             if(currentUser==null) {
                 currentUser = new User((JSONObject) jsonObject.get("user"));
                 currentUser.setProfile_image_url(currentUser.getProfile_image_url());
+                currentUser.setId_str(currentUser.getId_str());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -95,6 +95,21 @@ public class TweetSampleDataProvider {
                     JSONObject tweetObject = statusesArray.getJSONObject(i);
                     Tweet tweet = new Tweet(tweetObject);
                     tweetList.add(tweet);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void parseUserFriendsData(String jsonString, List<User> userList) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray usersArray = jsonObject.getJSONArray("users");
+            if (userList.size() < usersArray.length()) {
+                for (int i = 0; i < usersArray.length(); i++) {
+                    JSONObject userObject = usersArray.getJSONObject(i);
+                    User user = new User(userObject);
+                    userList.add(user);
                 }
             }
         } catch (JSONException e) {

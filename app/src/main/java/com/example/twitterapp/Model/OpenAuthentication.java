@@ -1,13 +1,11 @@
 package com.example.twitterapp.Model;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.example.twitterapp.R;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.exceptions.OAuthException;
@@ -18,7 +16,6 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-import java.io.IOException;
 import java.util.Observable;
 
 /**
@@ -339,4 +336,149 @@ public class OpenAuthentication extends Observable {
         getMentionTimeline timeline = new getMentionTimeline();
         timeline.execute();
     }
+
+    private class setRetweetTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/statuses/retweet/:id.json";
+            String input = strings[0];
+            url = url.replace(":id",input);
+            request = new OAuthRequest(Verb.POST,url);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+    private class setUnRetweetTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/statuses/unretweet/:id.json";
+            String input = strings[0];
+            url = url.replace(":id",input);
+            request = new OAuthRequest(Verb.POST,url);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
+    public void retweet(String id){
+        setRetweetTask task = new setRetweetTask();
+        task.execute(id);
+    }
+    public void unRetweet(String id){
+        setUnRetweetTask task = new setUnRetweetTask();
+        task.execute(id);
+    }
+
+    public void like(String id){
+        setLikeTask task = new setLikeTask();
+        task.execute(id);
+    }
+
+    private class setLikeTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/favorites/create.json?id=like";
+            String input = strings[0];
+            url = url.replace("like",input);
+            request = new OAuthRequest(Verb.POST,url);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
+    public void unlike(String id){
+        setUnLikeTask task = new setUnLikeTask();
+        task.execute(id);
+    }
+    private class setUnLikeTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/favorites/destroy.json?id=like";
+            String input = strings[0];
+            url = url.replace("like",input);
+            request = new OAuthRequest(Verb.POST,url);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
+    public void friendList(String screenUserName){
+        getFriendList task = new getFriendList();
+        task.execute(screenUserName);
+    }
+
+    private class getFriendList extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String url = "https://api.twitter.com/1.1/followers/list.json?cursor=-1&screen_name=twitterdev&skip_status=true&include_user_entities=false";
+            String input = strings[0];
+            url = url.replace("twitterdev",input);
+            request = new OAuthRequest(Verb.GET,url);
+            service.signRequest(accessToken,request);
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.userFollowers.clear();
+                TweetSampleDataProvider.parseUserFriendsData(res,TweetSampleDataProvider.userFollowers);
+            }catch (Exception e) {
+                Log.d(TAG, e.toString()) ;
+            }
+
+            return null;
+        }
+    }
+
 }
