@@ -68,8 +68,7 @@ public class MainActivity extends Activity implements Observer {
         mSearchBtn = findViewById(R.id.searchBtn);
         tweetList.invalidate();
         twitterButtons = findViewById(R.id.hTwitterButtons);
-        tweetListAdapter = new TweetListAdapter(this, R.layout.tweet, tweetslist);
-        tweetList.setAdapter(tweetListAdapter);
+
         if (TweetSampleDataProvider.tweetsTimeline != null) {
 
             fillList(tweetslist);

@@ -1,5 +1,6 @@
 package com.example.twitterapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,7 +28,7 @@ import java.util.Observer;
  * Created by yang- on 01/07/2018.
  */
 
-public class DetailedActivity extends AppCompatActivity implements Observer {
+public class DetailedActivity extends Activity implements Observer {
     private static final String AUTHORISED = "authorised";
     private static final String ACCESS_TOKEN = "Access Token";
     private static final String ACCESS_TOKEN_SECRET = "Access Token Secret";
@@ -54,15 +55,14 @@ public class DetailedActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailed_tweet);
         authentication.addObserver(this);
-        tweetList = findViewById(R.id.tweetsList);
+        tweetList = findViewById(R.id.detailedtweetlist);
         userImage = findViewById(R.id.acUserimage);
         mSearchBtn = findViewById(R.id.searchBtn);
 
-        int index = getIntent().getIntExtra("mainactivity", -1);
+        int index = getIntent().getIntExtra("MainActivity", -1);
 
         authentication.getRetweetReactions(tweetslist.get(index).getId());
-        TweetListAdapter tweetListSearchedAdapter = new TweetListAdapter(DetailedActivity.this, R.layout.tweet, TweetSampleDataProvider.tweetsDetailed);
-        tweetList.setAdapter(tweetListSearchedAdapter);
+        fillList(TweetSampleDataProvider.tweetsDetailed);
     }
 
     public void authorisationIntent() {
@@ -75,63 +75,6 @@ public class DetailedActivity extends AppCompatActivity implements Observer {
         tweetListAdapter.notifyDataSetChanged();
         tweetList.invalidate();
     }
-
-    @Override
-    protected void onResume() {
-        authentication.addObserver(this);
-        super.onResume();
-        tweetListAdapter.notifyDataSetChanged();
-        tweetList.invalidate();
-        if (authentication.isAuthorized()) {
-            authentication.callTweetTask();
-            tweetListAdapter.notifyDataSetChanged();
-            tweetList.invalidate();
-            authentication.callProfileTimeline();
-            authentication.callMentionsTimeline();
-            authentication.setUser();
-            if (TweetSampleDataProvider.currentUser != null) {
-                current = TweetSampleDataProvider.currentUser;
-                Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);
-                userImage.invalidate();
-                tweetListAdapter.notifyDataSetChanged();
-                tweetList.invalidate();
-                authentication.callMentionsTimeline();
-                authentication.friendList(current.getScreen_name());
-            }
-        } else {
-            authorisationIntent();
-            fillList(tweetslist);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        tweetListAdapter.notifyDataSetChanged();
-        tweetList.invalidate();
-    }
-
-    @Override
-    protected void onStop() {
-        SharedPreferences mSharedPreferences = getSharedPreferences(DetailedActivity.PREFS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-
-        if (authentication.isAuthorized()){
-            mEditor.putBoolean(AUTHORISED,true);
-            mEditor.putString(ACCESS_TOKEN,authentication.getStr_accesstoken());
-            mEditor.putString(ACCESS_TOKEN_SECRET,authentication.getStr_access_token_secret());
-            mEditor.apply();
-        }else {
-            mEditor.putBoolean(AUTHORISED,false);
-            mEditor.putString(ACCESS_TOKEN,"");
-            mEditor.putString(ACCESS_TOKEN_SECRET,"");
-            mEditor.apply();
-        }
-
-        mEditor.commit();
-        super.onStop();
-    }
-
 
     public void SignOut(View view) {
         SharedPreferences mSharedPreferences = getSharedPreferences(DetailedActivity.PREFS, Context.MODE_PRIVATE);
