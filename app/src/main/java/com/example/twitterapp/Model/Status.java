@@ -16,8 +16,6 @@ public class Status {
     private String id_str;
     private String text;
     private Boolean trunacated;
-    private Entity entity;
-    private Metadata metadata;
     private String source;
     private int in_reply_to_status_id;
     private String in_reply_to_status_id_str;
@@ -32,14 +30,12 @@ public class Status {
     private Boolean Retweeted;
     private String Lang;
 
-    public Status(String created_at , int id , String id_str , String text, Boolean trunacated ,Entity entity , Metadata metadata , String source , int in_reply_to_status_id ,String in_reply_to_status_id_str , String in_reply_to_screen_name ,User user,boolean is_quote_status,int Retweet_count , int Favorite_count,boolean Retweeted , String lang){
+    public Status(String created_at , int id , String id_str , String text, Boolean trunacated , String source , int in_reply_to_status_id ,String in_reply_to_status_id_str , String in_reply_to_screen_name ,User user,boolean is_quote_status,int Retweet_count , int Favorite_count,boolean Retweeted , String lang){
         this.created_at = created_at;
         this.id = id;
         this.id_str = id_str;
         this.text = text;
         this.trunacated = trunacated;
-        this.entity = entity;
-        this.metadata = metadata;
         this.source =source;
         this.in_reply_to_status_id=in_reply_to_status_id;
         this.in_reply_to_status_id_str = in_reply_to_status_id_str;
@@ -59,8 +55,6 @@ public class Status {
             this.id_str = object.getString("id_str");
             this.text = object.getString("text");
             this.trunacated = object.getBoolean("truncated");
-            this.entity = new Entity(object.getJSONObject("entity"));
-            this.metadata = new Metadata(object.getJSONObject("metadata"));
             this.source = object.getString("source");
             this.in_reply_to_status_id = object.getInt("in_reply_to_status_id");
             this.in_reply_to_status_id_str = object.getString("in_reply_to_status_id_str");
@@ -94,14 +88,6 @@ public class Status {
 
     public Boolean getTrunacated() {
         return trunacated;
-    }
-
-    public Entity getEntity() {
-        return entity;
-    }
-
-    public Metadata getMetadata() {
-        return metadata;
     }
 
     public String getSource() {

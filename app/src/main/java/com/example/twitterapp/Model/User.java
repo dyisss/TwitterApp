@@ -18,8 +18,6 @@ public class User {
     private String location;
     private String description;
     private String url;
-    private Entity entity;
-    //private Boolean protected;
     private int followers_count;
     private int friends_count;
     private int listed_count;
@@ -64,13 +62,11 @@ public class User {
             this.description = object.getString("description");
             this.url = object.getString("url");
             this.friendsCount = object.getInt("friends_count");
-           // this.entity = new Entity(object.getJSONObject("entity"));
             this.followers_count = object.getInt("followers_count");
             this.friends_count = object.getInt("friends_count");
             this.listed_count = object.getInt("listed_count");
             this.created_at = object.getString("created_at");
             this.favourites_count = object.getInt("favourites_count");
-  //          this.utc_offset = object.getInt("utc_offset");
             this.time_zone = object.getString("time_zone");
             this.geo_enabled = object.getBoolean("geo_enabled");
             this.verified = object.getBoolean("verified");
@@ -148,14 +144,6 @@ public class User {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public int getFollowers_count() {
