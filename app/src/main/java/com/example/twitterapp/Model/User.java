@@ -52,50 +52,46 @@ public class User {
     private String translator_type;
     private int friendsCount;
 
-    public User(JSONObject object){
-        try{
-            this.id = object.getInt("id");
-            this.id_str = object.getString("id_str");
-            this.name = object.getString("name");
-            this.screen_name = object.getString("screen_name");
-            this.location = object.getString("location");
-            this.description = object.getString("description");
-            this.url = object.getString("url");
-            this.friendsCount = object.getInt("friends_count");
-            this.followers_count = object.getInt("followers_count");
-            this.friends_count = object.getInt("friends_count");
-            this.listed_count = object.getInt("listed_count");
-            this.created_at = object.getString("created_at");
-            this.favourites_count = object.getInt("favourites_count");
-            this.time_zone = object.getString("time_zone");
-            this.geo_enabled = object.getBoolean("geo_enabled");
-            this.verified = object.getBoolean("verified");
-            this.statuses_count = object.getInt("statuses_count");
-            this.lang = object.getString("lang");
-            this.contributors_enabled = object.getBoolean("contributors_enabled");
-            this.is_translator = object.getBoolean("is_translator");
-            this.is_translation_enabled = object.getBoolean("is_translation_enabled");
-            this.profile_background_color = object.getString("profile_background_color");
-            this.profile_background_image_url = object.getString("profile_background_image_url");
-            this.profile_background_tile = object.getBoolean("profile_background_tile");
-            this.profile_image_url = object.getString("profile_image_url").replace("_normal","");
-            this.profile_image_url_https = object.getString("profile_image_url_https");
-            this.profile_banner_url = object.getString("profile_banner_url");
-            this.profile_link_color = object.getString("profile_link_color");
-            this.profile_sidebar_border_color = object.getString("profile_sidebar_border_color");
-            this.profile_sidebar_fill_color = object.getString("profile_sidebar_fill_color");
-            this.profile_text_color = object.getString("profile_text_color");
-            this.profile_use_background_image = object.getBoolean("profile_use_background_image");
-            this.has_extended_profile = object.getBoolean("has_extended_profile");
-            this.default_profile = object.getBoolean("default_profile");
-            this.default_profile_image = object.getBoolean("default_profile_image");
-            this.following = object.getBoolean("following");
-            this.follow_request_sent = object.getBoolean("follow_request_sent");
-            this.notifications = object.getBoolean("notifications");
-            this.translator_type = object.getString("translator_type");
-        }catch (JSONException e){
-            Log.d(TAG, e.toString());
-        }
+    public User(JSONObject object) throws JSONException {
+        this.id = object.getInt("id");
+        this.id_str = object.getString("id_str");
+        this.name = object.getString("name");
+        this.screen_name = object.getString("screen_name");
+        this.location = object.getString("location");
+        this.description = object.getString("description");
+        this.url = object.getString("url");
+        this.friendsCount = object.getInt("friends_count");
+        this.followers_count = object.getInt("followers_count");
+        this.friends_count = object.getInt("friends_count");
+        this.listed_count = object.getInt("listed_count");
+        this.created_at = object.getString("created_at");
+        this.favourites_count = object.getInt("favourites_count");
+        this.time_zone = object.getString("time_zone");
+        this.geo_enabled = object.getBoolean("geo_enabled");
+        this.verified = object.getBoolean("verified");
+        this.statuses_count = object.getInt("statuses_count");
+        this.lang = object.getString("lang");
+        this.contributors_enabled = object.getBoolean("contributors_enabled");
+        this.is_translator = object.getBoolean("is_translator");
+        this.is_translation_enabled = object.getBoolean("is_translation_enabled");
+        this.profile_background_color = object.getString("profile_background_color");
+        this.profile_background_image_url = object.getString("profile_background_image_url");
+        this.profile_background_tile = object.getBoolean("profile_background_tile");
+        this.profile_image_url = object.getString("profile_image_url").replace("_normal","");
+        this.profile_image_url_https = object.getString("profile_image_url_https");
+        this.profile_banner_url = object.getString("profile_banner_url");
+        this.profile_link_color = object.getString("profile_link_color");
+        this.profile_sidebar_border_color = object.getString("profile_sidebar_border_color");
+        this.profile_sidebar_fill_color = object.getString("profile_sidebar_fill_color");
+        this.profile_text_color = object.getString("profile_text_color");
+        this.profile_use_background_image = object.getBoolean("profile_use_background_image");
+        this.has_extended_profile = object.getBoolean("has_extended_profile");
+        this.default_profile = object.getBoolean("default_profile");
+        this.default_profile_image = object.getBoolean("default_profile_image");
+        this.following = object.getBoolean("following");
+        this.follow_request_sent = object.getBoolean("follow_request_sent");
+        this.notifications = object.getBoolean("notifications");
+        this.translator_type = object.getString("translator_type");
     }
 
     public int getId() {

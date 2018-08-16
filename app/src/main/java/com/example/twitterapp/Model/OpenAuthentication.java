@@ -16,6 +16,7 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Observable;
@@ -54,12 +55,8 @@ public class OpenAuthentication extends Observable {
         return oAuth;
     }
 
-    public String getUrl(){
-        try{
-            requestToken = service.getRequestToken();
-        }catch (Exception e){
-            Log.d(TAG, e.toString());
-        }
+    public String getUrl() throws Exception{
+        requestToken = service.getRequestToken();
         String authUrl = service.getAuthorizationUrl(requestToken);
         return authUrl;
     }
@@ -112,8 +109,6 @@ public class OpenAuthentication extends Observable {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-          //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
         }
 
         @Override

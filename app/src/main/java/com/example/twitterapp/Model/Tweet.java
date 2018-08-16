@@ -28,20 +28,15 @@ public class Tweet {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Tweet(JSONObject jsonObject ){
-        try {
-            this.id = jsonObject.getString("id_str");
-            this.text = jsonObject.getString("text");
-            this.user = new User(jsonObject.getJSONObject("user"));
-            String date =  jsonObject.getString("created_at");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy");
-            this.created_at = LocalDateTime.parse(date,formatter);
-            this.retweeted = false;
-            this.liked = false;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public Tweet(JSONObject jsonObject ) throws JSONException{
+        this.id = jsonObject.getString("id_str");
+        this.text = jsonObject.getString("text");
+        this.user = new User(jsonObject.getJSONObject("user"));
+        String date =  jsonObject.getString("created_at");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss Z yyyy");
+        this.created_at = LocalDateTime.parse(date,formatter);
+        this.retweeted = false;
+        this.liked = false;
     }
 
     public User getUser() {

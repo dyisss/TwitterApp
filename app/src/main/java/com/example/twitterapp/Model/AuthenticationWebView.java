@@ -57,7 +57,11 @@ public class AuthenticationWebView extends AppCompatActivity{
 
         @Override
         protected String doInBackground(Void... params) {
-            return openAuthentication.getUrl();
+            try {
+                return openAuthentication.getUrl();
+            } catch (Exception e){
+                return e.toString();
+            }
         }
     }
 
