@@ -73,15 +73,6 @@ public class SearchActivity extends Activity implements Observer{
                     }
                 }
         );
-
-//        userImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //add intent to access user profile
-//                Intent intent = new Intent(SearchActivity.this, Userprofile.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     public void authorisationIntent() {

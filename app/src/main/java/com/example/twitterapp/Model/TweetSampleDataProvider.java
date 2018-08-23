@@ -18,7 +18,7 @@ public class TweetSampleDataProvider {
 
     public static ArrayList<Tweet> tweetsSearched;
     public static ArrayList<Tweet> tweetsTimeline;
-    public static ArrayList<Tweet> detailedTweets;
+
     public static ArrayList<Tweet> profileTimeline;
     public static ArrayList<Tweet> mentionTimeline;
     public static ArrayList<Tweet>tweetsDetailed;

@@ -24,7 +24,7 @@ public class AuthenticationWebView extends AppCompatActivity{
     final OpenAuthentication openAuthentication = OpenAuthentication.getInstance();
     private String verifier;
 
-    @SuppressLint("SetJavaScriptEnabled")
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

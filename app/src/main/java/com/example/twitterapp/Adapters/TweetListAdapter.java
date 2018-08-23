@@ -75,6 +75,7 @@ public class TweetListAdapter extends ArrayAdapter{
             retweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //Make a helper method
                     retweet.setImageResource(R.drawable.retweet2);
                     retweet.invalidate();
                     if (!tweet.isRetweeted()) {

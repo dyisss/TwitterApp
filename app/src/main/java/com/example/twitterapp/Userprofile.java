@@ -74,7 +74,7 @@ public class Userprofile extends Activity {
         Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform( )).into(pUserImage);
         Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_banner_url()).fit().centerCrop().into(pBanner);
         pUsername.setText(TweetSampleDataProvider.currentUser.getName());
-        pUserScreenName.setText("@"+TweetSampleDataProvider.currentUser.getScreen_name());
+        pUserScreenName.setText(String.format("@%s", TweetSampleDataProvider.currentUser.getScreen_name()));
         pUserBio.setText(TweetSampleDataProvider.currentUser.getDescription());
         pLocation.setText(TweetSampleDataProvider.currentUser.getLocation());
         followingCount.setText(String.valueOf(TweetSampleDataProvider.currentUser.getFriends_count()));
