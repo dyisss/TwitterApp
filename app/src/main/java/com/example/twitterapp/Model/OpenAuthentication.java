@@ -59,6 +59,8 @@ public class OpenAuthentication extends Observable {
         return oAuth;
     }
 
+    //Authentication methods
+
     public String getUrl(){
         try{
             requestToken = service.getRequestToken();
@@ -69,14 +71,6 @@ public class OpenAuthentication extends Observable {
         return authUrl;
     }
 
-    public void loggedIn_AccessToken(String str_accesstoken,String str_access_token_secret){
-
-        this.str_accesstoken = str_accesstoken;
-        this.str_access_token_secret = str_access_token_secret;
-
-        accessToken = new OAuth1AccessToken(str_accesstoken ,str_access_token_secret);
-        authorized=true;
-    }
 
     public void setAccessToken(String verifier){
         try{
@@ -89,6 +83,16 @@ public class OpenAuthentication extends Observable {
         }catch (Exception e){
             Log.d(TAG, e.toString());
         }
+    }
+
+    //Creates access token and sets authorized
+    public void loggedIn_AccessToken(String str_accesstoken,String str_access_token_secret){
+
+        this.str_accesstoken = str_accesstoken;
+        this.str_access_token_secret = str_access_token_secret;
+
+        accessToken = new OAuth1AccessToken(str_accesstoken ,str_access_token_secret);
+        authorized=true;
     }
 
     public OAuth10aService getService() {
@@ -107,10 +111,6 @@ public class OpenAuthentication extends Observable {
         return authorized;
     }
 
-    public void callTweetTask(){
-        getTweetsTask g = new getTweetsTask();
-        g.execute();
-    }
 
     public String getStr_accesstoken() {
         return str_accesstoken;
@@ -120,42 +120,8 @@ public class OpenAuthentication extends Observable {
         return str_access_token_secret;
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private  class getTweetsTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-          //  DownloadTwitterTask dt = new DownloadTwitterTask();
-            // dt.execute();
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            notifyObservers();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/home_timeline.json");
-            service.signRequest(accessToken , request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.tweetsTimeline.clear();
-                TweetSampleDataProvider.parseJSONData("{\"statuses\":"+res+"}",TweetSampleDataProvider.tweetsTimeline);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-        return null;
-        }
-    }
-
+    //Async Tasks used by more than 1 class.
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     private class getRetweetsReactionsTask extends AsyncTask<String, Void, Void>{
 
@@ -174,41 +140,6 @@ public class OpenAuthentication extends Observable {
                 }
                 TweetSampleDataProvider.tweetsDetailed.clear();
                 TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsDetailed);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-            return null;
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
-
-        @SuppressLint("NewApi")
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            String baseUrl = "https://api.twitter.com/1.1/search/tweets.json?count=50&q=";
-
-            try{
-                String encodedSearchTerm = URLEncoder.encode(strings[0], "utf-8");
-                baseUrl += encodedSearchTerm;
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-
-            request = new OAuthRequest(Verb.GET, baseUrl);
-            service.signRequest(accessToken , request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.tweetsSearched.clear();
-                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
             }catch (Exception e) {
                 Log.d(TAG, e.toString()) ;
             }
@@ -242,139 +173,10 @@ public class OpenAuthentication extends Observable {
         }
     }
 
-
-    @SuppressLint("StaticFieldLeak")
-    private class setCurrentUserTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            notifyObservers();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/account/verify_credentials.json");
-            service.signRequest(accessToken , request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.setCurrentUser("{\"user\":"+res+"}");
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-            return null;
-        }
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void getRetweetReactions(String id){
         getRetweetsReactionsTask get = new getRetweetsReactionsTask();
         get.execute(id);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    public void searchTweets(String query){
-        getSearchedTweetsTask get = new getSearchedTweetsTask();
-        get.execute(query);
-    }
-
-    public void postTweet(String text){
-        setPostTweet post = new setPostTweet();
-        post.execute(text);
-    }
-
-    public void setUser(){
-        setCurrentUserTask user = new setCurrentUserTask();
-        user.execute();
-    }
-
-    private class getProfileTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            notifyObservers();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/user_timeline.json");
-            service.signRequest(accessToken, request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.profileTimeline.clear();
-                TweetSampleDataProvider.parseProfileTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.profileTimeline);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
-            return null;
-        }
-    }
-
-    public void callProfileTimeline(){
-       getProfileTimeline time = new getProfileTimeline();
-       time.execute();
-    }
-
-    private class getMentionTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            notifyObservers();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/mentions_timeline.json");
-            service.signRequest(accessToken, request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.mentionTimeline.clear();
-                TweetSampleDataProvider.parseMentionTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.mentionTimeline);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
-            return null;
-        }
-    }
-
-    public void callMentionsTimeline(){
-        getMentionTimeline timeline = new getMentionTimeline();
-        timeline.execute();
     }
 
     private class setRetweetTask extends AsyncTask<String,Void,Void>{
@@ -400,6 +202,7 @@ public class OpenAuthentication extends Observable {
             return null;
         }
     }
+
     private class setUnRetweetTask extends AsyncTask<String,Void,Void>{
 
         @Override
@@ -422,20 +225,6 @@ public class OpenAuthentication extends Observable {
 
             return null;
         }
-    }
-
-    public void retweet(String id){
-        setRetweetTask task = new setRetweetTask();
-        task.execute(id);
-    }
-    public void unRetweet(String id){
-        setUnRetweetTask task = new setUnRetweetTask();
-        task.execute(id);
-    }
-
-    public void like(String id){
-        setLikeTask task = new setLikeTask();
-        task.execute(id);
     }
 
     private class setLikeTask extends AsyncTask<String,Void,Void>{
@@ -462,10 +251,6 @@ public class OpenAuthentication extends Observable {
         }
     }
 
-    public void unlike(String id){
-        setUnLikeTask task = new setUnLikeTask();
-        task.execute(id);
-    }
     private class setUnLikeTask extends AsyncTask<String,Void,Void>{
 
         @Override
@@ -490,73 +275,27 @@ public class OpenAuthentication extends Observable {
         }
     }
 
-    public void friendList(String screenUserName){
-        getFriendList task = new getFriendList();
-        task.execute(screenUserName);
+    public void retweet(String id){
+        setRetweetTask task = new setRetweetTask();
+        task.execute(id);
     }
 
-    private class getFriendList extends AsyncTask<String,Void,Void>{
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            String url = "https://api.twitter.com/1.1/followers/list.json?cursor=-1&screen_name=twitterdev&skip_status=true&include_user_entities=false";
-            String input = strings[0];
-            url = url.replace("twitterdev",input);
-            request = new OAuthRequest(Verb.GET,url);
-            service.signRequest(accessToken,request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.userFollowers.clear();
-                TweetSampleDataProvider.parseUserFriendsData(res,TweetSampleDataProvider.userFollowers);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-
-            return null;
-        }
+    public void unRetweet(String id){
+        setUnRetweetTask task = new setUnRetweetTask();
+        task.execute(id);
     }
 
-    public void FavoriteTimeline(){
-        getFavoriteTimeline task = new getFavoriteTimeline();
-        task.execute();
+    public void unlike(String id){
+        setUnLikeTask task = new setUnLikeTask();
+        task.execute(id);
     }
 
-    private class getFavoriteTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-            notifyObservers();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/favorites/list.json");
-            service.signRequest(accessToken, request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.favoriteTimeline.clear();
-                TweetSampleDataProvider.parseFavoriteTimeline("{\"statuses\":" + res + "}", TweetSampleDataProvider.favoriteTimeline);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
-            return null;
-        }
+    public void like(String id){
+        setLikeTask task = new setLikeTask();
+        task.execute(id);
     }
-
+    public void postTweet(String text){
+        setPostTweet post = new setPostTweet();
+        post.execute(text);
+    }
 }

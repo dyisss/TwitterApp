@@ -198,26 +198,10 @@ public class Userprofile extends Activity {
         }
     }
 
-    public void callProfileTimeline(){
-        getProfileTimeline time = new getProfileTimeline();
-        time.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-        pTweetList.invalidate();
-    }
 
     private void Profiledatachanged(){
         adapter.notifyDataSetChanged();
         pTweetList.invalidate();
-    }
-
-    public void FavoriteTimeline(){
-        getFavoriteTimeline task = new getFavoriteTimeline();
-        task.execute();
     }
 
     private class getFavoriteTimeline extends  AsyncTask<Void, Void, Void> {
@@ -251,5 +235,22 @@ public class Userprofile extends Activity {
             }
             return null;
         }
+    }
+
+    public void callProfileTimeline(){
+        getProfileTimeline time = new getProfileTimeline();
+        time.execute();
+    }
+
+    public void FavoriteTimeline(){
+        getFavoriteTimeline task = new getFavoriteTimeline();
+        task.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        pTweetList.invalidate();
     }
 }

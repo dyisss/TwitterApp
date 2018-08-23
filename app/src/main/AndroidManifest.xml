@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Model.AuthenticationWebView" />
+        <activity android:name=".View.AuthenticationWebView" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".DetailedActivity" />
         <activity android:name=".Userprofile">

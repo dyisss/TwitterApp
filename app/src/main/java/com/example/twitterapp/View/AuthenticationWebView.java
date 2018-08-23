@@ -1,19 +1,17 @@
-package com.example.twitterapp.Model;
+package com.example.twitterapp.View;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.R;
-import com.github.scribejava.core.model.OAuth1AccessToken;
 
 /**
  * Created by Kyle on 22-Jun-18.

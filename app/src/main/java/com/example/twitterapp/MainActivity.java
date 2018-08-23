@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
-import com.example.twitterapp.Model.AuthenticationWebView;
+import com.example.twitterapp.View.AuthenticationWebView;
 import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements Observer {
                                         Toast.makeText(MainActivity.this, "Character limit passed", Toast.LENGTH_SHORT).show();
                                     }
                                     String text = String.valueOf(YouEditTextValue);
-                                    postTweet(text);
+                                    authentication.postTweet(text);
 
                                 }
                             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -144,8 +144,6 @@ public class MainActivity extends Activity implements Observer {
                 }
             });
         }
-
-
 
     public void authorisationIntent() {
         Intent authIntent = new Intent(MainActivity.this, AuthenticationWebView.class);
@@ -167,7 +165,6 @@ public class MainActivity extends Activity implements Observer {
         if (authentication.isAuthorized()) {
             callTweetTask();
             callProfileTimeline();
-            callMentionsTimeline();
             setUser();
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
@@ -175,7 +172,6 @@ public class MainActivity extends Activity implements Observer {
                 current = TweetSampleDataProvider.currentUser;
                 Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);
                 userImage.invalidate();
-                callMentionsTimeline();
             }
         } else {
             authorisationIntent();
@@ -229,18 +225,8 @@ public class MainActivity extends Activity implements Observer {
         tweetListAdapter.notifyDataSetChanged();
     }
 
-    public void callTweetTask(){
-        getTweetsTask g = new getTweetsTask();
-        g.execute();
-    }
-
     @SuppressLint("StaticFieldLeak")
     private  class getTweetsTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -268,117 +254,8 @@ public class MainActivity extends Activity implements Observer {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    private class getRetweetsReactionsTask extends AsyncTask<String, Void, Void>{
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @SuppressLint("NewApi")
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/retweets/"+ strings[0] +".json");
-            service.signRequest(authentication.getAccessToken() , request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.tweetsDetailed.clear();
-                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsDetailed);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-            return null;
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-    private class getSearchedTweetsTask extends AsyncTask<String, Void, Void>{
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @SuppressLint("NewApi")
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            String baseUrl = "https://api.twitter.com/1.1/search/tweets.json?count=50&q=";
-
-            try{
-                String encodedSearchTerm = URLEncoder.encode(strings[0], "utf-8");
-                baseUrl += encodedSearchTerm;
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-
-            request = new OAuthRequest(Verb.GET, baseUrl);
-            service.signRequest(authentication.getAccessToken() , request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()){
-                    res = response.getBody();
-                    Log.d("response",res);
-                }
-                TweetSampleDataProvider.tweetsSearched.clear();
-                TweetSampleDataProvider.parseJSONData(res,TweetSampleDataProvider.tweetsSearched);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-            return null;
-        }
-    }
-
-    private class setPostTweet extends AsyncTask<String,Void,Void>{
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            String url = "https://api.twitter.com/1.1/statuses/update.json?status=";
-            String input = strings[0];
-            input = input.replace(" ","%20");
-            input = input.replace("#","%23");
-
-            request = new OAuthRequest(Verb.POST,url+input);
-            service.signRequest(authentication.getAccessToken(),request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-
-            return null;
-        }
-    }
-
-
     @SuppressLint("StaticFieldLeak")
     private class setCurrentUserTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -406,24 +283,7 @@ public class MainActivity extends Activity implements Observer {
 
     }
 
-
-    public void postTweet(String text){
-        setPostTweet post = new setPostTweet();
-        post.execute(text);
-    }
-
-    public void setUser(){
-        setCurrentUserTask user = new setCurrentUserTask();
-        user.execute();
-    }
-
     private class getProfileTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -451,53 +311,24 @@ public class MainActivity extends Activity implements Observer {
         }
     }
 
+    public void setUser(){
+        setCurrentUserTask user = new setCurrentUserTask();
+        user.execute();
+    }
+
     public void callProfileTimeline(){
         getProfileTimeline time = new getProfileTimeline();
         time.execute();
     }
 
-    private class getMentionTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/mentions_timeline.json");
-            service.signRequest(authentication.getAccessToken(), request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.mentionTimeline.clear();
-                TweetSampleDataProvider.parseMentionTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.mentionTimeline);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
-            return null;
-        }
-    }
-
-    public void callMentionsTimeline(){
-        getMentionTimeline timeline = new getMentionTimeline();
-        timeline.execute();
-    }
-
-
     private void datachanged(){
         tweetListAdapter.notifyDataSetChanged();
         tweetList.invalidate();
+    }
+
+    public void callTweetTask(){
+        getTweetsTask g = new getTweetsTask();
+        g.execute();
     }
 }
 

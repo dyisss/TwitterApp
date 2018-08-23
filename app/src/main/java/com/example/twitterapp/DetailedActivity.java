@@ -6,20 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
-import com.example.twitterapp.Model.AuthenticationWebView;
+import com.example.twitterapp.View.AuthenticationWebView;
 import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.Model.Tweet;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
 import com.example.twitterapp.Model.User;
 import com.example.twitterapp.View.TweetView;
 import com.example.twitterapp.View.TwitterButtons;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Observable;
