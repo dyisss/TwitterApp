@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -19,8 +18,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.twitterapp.Adapters.TweetListAdapter;
@@ -172,7 +169,6 @@ public class MainActivity extends Activity implements Observer {
             callProfileTimeline();
             callMentionsTimeline();
             setUser();
-            FavoriteTimeline();
             tweetListAdapter.notifyDataSetChanged();
             tweetList.invalidate();
             if (TweetSampleDataProvider.currentUser != null) {
@@ -180,7 +176,6 @@ public class MainActivity extends Activity implements Observer {
                 Picasso.get().load(TweetSampleDataProvider.currentUser.getProfile_image_url()).transform(new TweetListAdapter.CircleTransform()).into(userImage);
                 userImage.invalidate();
                 callMentionsTimeline();
-                friendList(current.getScreen_name());
             }
         } else {
             authorisationIntent();
@@ -499,80 +494,6 @@ public class MainActivity extends Activity implements Observer {
         timeline.execute();
     }
 
-
-    public void friendList(String screenUserName){
-        getFriendList task = new getFriendList();
-        task.execute(screenUserName);
-    }
-
-    private class getFriendList extends AsyncTask<String,Void,Void>{
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            String url = "https://api.twitter.com/1.1/followers/list.json?cursor=-1&screen_name=twitterdev&skip_status=true&include_user_entities=false";
-            String input = strings[0];
-            url = url.replace("twitterdev",input);
-            request = new OAuthRequest(Verb.GET,url);
-            service.signRequest(authentication.getAccessToken(),request);
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.userFollowers.clear();
-                TweetSampleDataProvider.parseUserFriendsData(res,TweetSampleDataProvider.userFollowers);
-            }catch (Exception e) {
-                Log.d(TAG, e.toString()) ;
-            }
-
-            return null;
-        }
-    }
-
-    public void FavoriteTimeline(){
-        getFavoriteTimeline task = new getFavoriteTimeline();
-        task.execute();
-    }
-
-    private class getFavoriteTimeline extends  AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            datachanged();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected Void doInBackground(Void... voids) {
-            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/favorites/list.json");
-            service.signRequest(authentication.getAccessToken(), request); // the access token from step 4
-            Response response = null;
-            try {
-                response = service.execute(request);
-                if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.d("response", res);
-                }
-                TweetSampleDataProvider.favoriteTimeline.clear();
-                TweetSampleDataProvider.parseFavoriteTimeline("{\"statuses\":" + res + "}", TweetSampleDataProvider.favoriteTimeline);
-            } catch (Exception e) {
-                Log.d(TAG, e.toString());
-            }
-            return null;
-        }
-    }
 
     private void datachanged(){
         tweetListAdapter.notifyDataSetChanged();

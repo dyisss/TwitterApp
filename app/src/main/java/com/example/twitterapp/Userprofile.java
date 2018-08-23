@@ -3,11 +3,15 @@ package com.example.twitterapp;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +23,10 @@ import com.example.twitterapp.Adapters.ProfileTweetListAdapter;
 import com.example.twitterapp.Adapters.TweetListAdapter;
 import com.example.twitterapp.Model.TweetSampleDataProvider;
 import com.example.twitterapp.View.TwitterButtons;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuth10aService;
 import com.squareup.picasso.Picasso;
 
 import static com.example.twitterapp.MainActivity.authentication;
@@ -28,6 +36,7 @@ import static com.example.twitterapp.MainActivity.authentication;
  */
 
 public class Userprofile extends Activity {
+    private static final String TAG = "Userprofile";
     private ImageView pUserImage;
     private ImageView pBanner;
     private TextView  pUsername;
@@ -40,9 +49,13 @@ public class Userprofile extends Activity {
     private TextView  pTweetsLabel;
     private ListView pTweetList;
     private ProfileTweetListAdapter adapter;
-    private TwitterButtons twitterButtons;
     private ImageView post;
     private TextView friendlist;
+
+    //Twitter Activities fields
+    private OAuthRequest request;
+    private OAuth10aService service;
+    private String res = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +70,6 @@ public class Userprofile extends Activity {
             }
         });
         pUserImage = findViewById(R.id.pUserimage);
-        twitterButtons = findViewById(R.id.twitterButtons4);
         pBanner = findViewById(R.id.pUserBanner);
         pUsername = findViewById(R.id.pUsername);
         pUserScreenName = findViewById(R.id.pUserScreenName);
@@ -80,15 +92,18 @@ public class Userprofile extends Activity {
         followingCount.setText(String.valueOf(TweetSampleDataProvider.currentUser.getFriends_count()));
         followerCount.setText(String.valueOf(TweetSampleDataProvider.currentUser.getFollowers_count()));
         adapter.notifyDataSetChanged();
-
         pTweetList.setAdapter(adapter);
+        service= authentication.getService();
+
+        //Gets users retweeted timeline and favorite timeline
+        callProfileTimeline();
+        FavoriteTimeline();
 
         pTweetsLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter = new ProfileTweetListAdapter(Userprofile.this,R.layout.tweet,TweetSampleDataProvider.profileTimeline);
                 pTweetList.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
                 pTweetList.invalidate();
             }
         });
@@ -98,7 +113,6 @@ public class Userprofile extends Activity {
             public void onClick(View view) {
                 adapter = new ProfileTweetListAdapter(Userprofile.this,R.layout.tweet,TweetSampleDataProvider.favoriteTimeline);
                 pTweetList.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
                 pTweetList.invalidate();
             }
         });
@@ -150,6 +164,45 @@ public class Userprofile extends Activity {
             });
     }
 
+    private class getProfileTimeline extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Profiledatachanged();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/statuses/user_timeline.json");
+            service.signRequest(authentication.getAccessToken(), request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.profileTimeline.clear();
+                TweetSampleDataProvider.parseProfileTimelineData("{\"statuses\":" + res + "}", TweetSampleDataProvider.profileTimeline);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+            return null;
+        }
+    }
+
+    public void callProfileTimeline(){
+        getProfileTimeline time = new getProfileTimeline();
+        time.execute();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -157,4 +210,46 @@ public class Userprofile extends Activity {
         pTweetList.invalidate();
     }
 
+    private void Profiledatachanged(){
+        adapter.notifyDataSetChanged();
+        pTweetList.invalidate();
+    }
+
+    public void FavoriteTimeline(){
+        getFavoriteTimeline task = new getFavoriteTimeline();
+        task.execute();
+    }
+
+    private class getFavoriteTimeline extends  AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Profiledatachanged();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected Void doInBackground(Void... voids) {
+            request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/favorites/list.json");
+            service.signRequest(authentication.getAccessToken(), request); // the access token from step 4
+            Response response = null;
+            try {
+                response = service.execute(request);
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+                    Log.d("response", res);
+                }
+                TweetSampleDataProvider.favoriteTimeline.clear();
+                TweetSampleDataProvider.parseFavoriteTimeline("{\"statuses\":" + res + "}", TweetSampleDataProvider.favoriteTimeline);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+            }
+            return null;
+        }
+    }
 }
