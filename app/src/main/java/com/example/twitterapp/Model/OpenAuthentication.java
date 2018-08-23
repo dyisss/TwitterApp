@@ -60,7 +60,6 @@ public class OpenAuthentication extends Observable {
         return oAuth;
     }
 
-    //for yan
     public String getUrl() throws Exception{
         requestToken = service.getRequestToken();
         String authUrl = service.getAuthorizationUrl(requestToken);
