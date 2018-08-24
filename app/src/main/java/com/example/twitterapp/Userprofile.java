@@ -171,7 +171,6 @@ public class Userprofile extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
