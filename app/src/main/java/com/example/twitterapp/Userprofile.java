@@ -1,5 +1,6 @@
 package com.example.twitterapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import static com.example.twitterapp.MainActivity.authentication;
 

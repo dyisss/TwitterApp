@@ -2,9 +2,13 @@ package com.example.twitterapp.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -66,6 +70,32 @@ public class TweetListAdapter extends ArrayAdapter{
             name.setText(tweet.getUser().getName());
             tweetText.setText(tweet.getText());
             date.setText(tweet.getCreated_at());
+
+            //Image Changer retweets
+            Bitmap retweetingIcon = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.retweet2);
+            Bitmap fullretweetIcon = BitmapFactory.decodeResource(convertView.getResources(),R.drawable.retweet);
+
+            final Drawable[] retweetAction = new Drawable[2];
+            retweetAction[0] = new BitmapDrawable(convertView.getResources(), retweetingIcon);
+            retweetAction[1] = new BitmapDrawable(convertView.getResources(),fullretweetIcon);
+
+            final Drawable[] unRetweetAction = new Drawable[2];
+            unRetweetAction[0] = new BitmapDrawable(convertView.getResources(), fullretweetIcon);
+            unRetweetAction[1] = new BitmapDrawable(convertView.getResources(), retweetingIcon);
+
+            //image Changer Likes
+            Bitmap likingIcon = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.like);
+            Bitmap fullLikingIcon = BitmapFactory.decodeResource(convertView.getResources(),R.drawable.like2);
+
+            final Drawable[] likingAction = new Drawable[2];
+            likingAction[0] = new BitmapDrawable(convertView.getResources(), likingIcon);
+            likingAction[1] = new BitmapDrawable(convertView.getResources(), fullLikingIcon);
+
+            final Drawable[] unLikingAction = new Drawable[2];
+            unLikingAction[0] = new BitmapDrawable(convertView.getResources(), fullLikingIcon);
+            unLikingAction[1] = new BitmapDrawable(convertView.getResources(), likingIcon);
+
+            //buttons
             reply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -75,16 +105,17 @@ public class TweetListAdapter extends ArrayAdapter{
             retweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Make a helper method
-                    retweet.setImageResource(R.drawable.retweet2);
-                    retweet.invalidate();
                     if (!tweet.isRetweeted()) {
                         authentication.retweet(tweet.getId());
+                        TransitionDrawable transitionDrawable = new TransitionDrawable(retweetAction);
+                        retweet.setImageDrawable(transitionDrawable);
+                        transitionDrawable.startTransition(10);
                         tweet.setRetweeted(true);
                     }else{
                         authentication.unRetweet(tweet.getId());
-                        retweet.setImageResource(R.drawable.retweet);
-                        retweet.invalidate();
+                        TransitionDrawable transitionDrawable = new TransitionDrawable(unRetweetAction);
+                        retweet.setImageDrawable(transitionDrawable);
+                        transitionDrawable.startTransition(10);
                         tweet.setRetweeted(false);
                     }
                 }
@@ -94,14 +125,16 @@ public class TweetListAdapter extends ArrayAdapter{
                 public void onClick(View view) {
                     if (!tweet.isLiked()) {
                         authentication.like(tweet.getId());
-                        like.setImageResource(R.drawable.like);
-                        like.invalidate();
+                        TransitionDrawable transitionDrawable = new TransitionDrawable(likingAction);
+                        like.setImageDrawable(transitionDrawable);
+                        transitionDrawable.startTransition(10);
                         tweet.setLiked(true);
 
                     } else {
                         authentication.unlike(tweet.getId());
-                        like.setImageResource(R.drawable.like2);
-                        like.invalidate();
+                        TransitionDrawable transitionDrawable = new TransitionDrawable(unLikingAction);
+                        like.setImageDrawable(transitionDrawable);
+                        transitionDrawable.startTransition(10);
                         tweet.setLiked(false);
                     }
                 }

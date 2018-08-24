@@ -13,6 +13,8 @@ import android.webkit.WebViewClient;
 import com.example.twitterapp.Model.OpenAuthentication;
 import com.example.twitterapp.R;
 
+import java.io.IOException;
+
 /**
  * Created by Kyle on 22-Jun-18.
  */
@@ -28,17 +30,15 @@ public class AuthenticationWebView extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authroization);
         wvAuth = findViewById(R.id.tweetWeb);
-        wvAuth.getSettings().setJavaScriptEnabled(true);
         wvAuth.setWebViewClient(new WebViewClient(){
 
-            public boolean shouldOverrideUrlLoading(WebView view, String url){
-                if(url.startsWith("https://www.google.com/"));{
+            public boolean shouldOverrideUrlLoading(WebView view, String url) throws RuntimeException {
+                if(url.startsWith("https://www.google.com/")){
                     Uri uri = Uri.parse(url);
                     verifier = uri.getQueryParameter("oauth_verifier");
                     AccessTokenTask accessTokenTask = new AccessTokenTask();
                     accessTokenTask.execute(verifier);
                 }
-
            return true;
             }
         });
